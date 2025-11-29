@@ -1,3 +1,4 @@
+import * as projectController from '../controllers/projects.control.js'
 
 // Data Models
 const UserTypes = {
@@ -511,6 +512,7 @@ function updateMyApplicationsContent() {
 function updateMyProjectsContent() {
 	const myProjectsContent = document.getElementById('my-projects-content');
 	
+
 	const myProjects = projects.filter(project => 
 		project.ownerId === currentUser.id
 	);
@@ -576,7 +578,7 @@ function handleProjectSubmit(e) {
 	const category = document.getElementById('project-category').value;
 	
 	const isEdit = projectModalTitle.textContent === 'Editar Proyecto';
-	
+
 	if (isEdit) {
 		// Find and update project (simplified - in real app we'd know which project to update)
 		showAlert('Funcionalidad de edición no implementada completamente.', 'warning');
@@ -590,12 +592,9 @@ function handleProjectSubmit(e) {
 			category,
 			ownerId: currentUser.id,
 			status: ProjectStatus.OPEN,
-			creationDate: new Date().toISOString(),
-			assignedFreelancerId: null
+			creationDate: new Date().toISOString()
 		};
-		
-		projects.push(newProject);
-		localStorage.setItem('projects', JSON.stringify(projects));
+		projectController.addProject(newProject)
 		
 		showAlert('Proyecto creado exitosamente.', 'success');
 		updateMyProjectsContent();

@@ -16,11 +16,24 @@ const writeFile = (data) => fs.writeFileSync(filePath, JSON.stringify(data, null
 export const getProjects = () => readFile();
 
 export const createProject = (projectData) => {
-  const parsed = ProjectSchema.parse(projectData);  // validation
+
+  const result  = ProjectSchema.safeParse(projectData);  // validation
+  if (!result.success) 
+    return { 
+        'success': 409,
+        'body': Object.assign(
+          {"description": "insertion of project on post failed cause project was ugly"}, 
+          result.error)
+      }
+
   const data = readFile();
-  data.push(parsed);
+  data.push(result.data);
   writeFile(data);
-  return parsed;
+  
+  return { 
+        'success': 201,
+        'body': result.data
+  }
 };
 
 export const updateProject = (id, newData) => {

@@ -12,6 +12,7 @@ const __dirname = dirname(__filename);
 import router from './App/backend/router.js'
 
 // make easy for the html files to call the css/js/images
+app.use(express.json());
 app.use(express.static(path.join(__dirname, "app", "frontend")));
 app.use(router)
 

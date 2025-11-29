@@ -6,9 +6,11 @@ const router = express.Router();
 
 router.get("/", (req, res) => res.json(service.getProjects()));
 
-router.post("/", (req, res) => {
-  const created = service.createProject(req.body);
-  res.status(201).json(created);
+router.post("/", async (req, res) => {
+
+  const result = service.createProject(req.body);
+
+  return res.status(result.success).json(result.body)
 });
 
 router.put("/:id", (req, res) => {
