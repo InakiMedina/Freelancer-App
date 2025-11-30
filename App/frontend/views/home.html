@@ -157,9 +157,12 @@
         </section>
 
         <!-- Project Modal -->
-        <div id="project-modal" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 1000;">
+        <div id="project-modal" class="hidden modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 1000;">
             <div class="card" style="width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto;">
                 <h2 id="project-modal-title">Crear Proyecto</h2>
+                <button class="x-close-btn" onclick="closeModal('project-modal')">
+                    &times;
+                </button>
                 <form id="project-form">
                     <div class="form-group">
                         <label class="form-label" for="project-title">Título</label>
@@ -191,11 +194,25 @@
                             <!-- Applicants will be loaded here -->
                         </div>
                     </div>
+                    <div id="secret_group">
+                        <button type="button" class="btn btn-danger hidden" id="project-delete-btn">Destruir Proyecto</button>
+                    </div>
                     <div class="form-group" style="display: flex; gap: 10px;">
                         <button type="submit" class="btn btn-primary" id="project-submit-btn">Guardar</button>
                         <button type="button" class="btn btn-outline" id="project-cancel-btn">Cancelar</button>
                     </div>
                 </form>
+            </div>
+        </div>
+
+        <!-- Confirmation modal -->
+        <div id="confirmOverlay" class="confirm-overlay" style="display:none;">
+            <div class="confirm-box">
+                <p id="confirmMessage"></p>
+                <div class="confirm-buttons">
+                <button id="confirmOk" class="btn btn-success">OK</button>
+                <button id="confirmCancel" class="btn btn-danger">Cancel</button>
+                </div>
             </div>
         </div>
     </body>

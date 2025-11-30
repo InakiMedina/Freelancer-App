@@ -1,4 +1,4 @@
-import * as projectController from '../controllers/projects.control.js'
+import * as projectApi from '../api/projects.api.js'
 
 // Data Models
 const UserTypes = {
@@ -62,7 +62,39 @@ const projectModalTitle = document.getElementById('project-modal-title');
 const projectForm = document.getElementById('project-form');
 const projectSubmitBtn = document.getElementById('project-submit-btn');
 const projectCancelBtn = document.getElementById('project-cancel-btn');
+const projectDeleteBtn = document.getElementById('project-delete-btn')
 const projectApplicantsGroup = document.getElementById('project-applicants-group');
+
+// Generates the X button HTML
+function htmlXButton(onClickFnName) {
+    return `
+        <button class="x-close-btn" onclick="${onClickFnName}()">
+            &times;
+        </button>
+    `;
+}
+
+function customConfirm(message) {
+    return new Promise((resolve) => {
+        const overlay = document.getElementById("confirmOverlay");
+        const msg = document.getElementById("confirmMessage");
+        const okBtn = document.getElementById("confirmOk");
+        const cancelBtn = document.getElementById("confirmCancel");
+
+        msg.textContent = message;
+        overlay.style.display = "flex";
+
+        okBtn.onclick = () => {
+            overlay.style.display = "none";
+            resolve(true);
+        };
+
+        cancelBtn.onclick = () => {
+            overlay.style.display = "none";
+            resolve(false);
+        };
+    });
+}
 
 // Initialize App
 function initApp() {
@@ -512,7 +544,7 @@ function updateMyApplicationsContent() {
 async function updateMyProjectsContent() {
 	const myProjectsContent = document.getElementById('my-projects-content');
 	
-	const myProjects = await projectController.getProjectsFromOwnerId(currentUser.id)
+	const myProjects = await projectApi.getProjectsFromOwnerId(currentUser.id)
 	
 	if (myProjects.length === 0) {
 		myProjectsContent.innerHTML = '<p>No has creado ningún proyecto aún.</p>';
@@ -534,7 +566,7 @@ async function updateMyProjectsContent() {
 				<p><strong>Presupuesto:</strong> $${project.budget}</p>
 				<p><strong>Postulantes:</strong> ${applicants.length}</p>
 				${assignedFreelancer ? `<p><strong>Freelancer asignado:</strong> ${assignedFreelancer.name}</p>` : ''}
-				<button class="btn btn-outline mt-20" onclick="editProject('${project.id}')">Editar</button>
+				<button class="btn btn-outline mt-20" onclick="showProjectModal('${project.id}')">Editar</button>
 				<button class="btn btn-primary mt-20" onclick="viewProjectDetails('${project.id}')">Ver Detalles</button>
 			</div>
 		`;
@@ -552,6 +584,11 @@ function showProjectModal(projectId = null) {
 	projectApplicantsGroup.style.display = 'none';
 	
 	if (isEdit) {
+	// 	const btn = document.createElement('button')
+		const delBtn = document.getElementById("project-delete-btn")
+		delBtn.classList.remove('hidden')
+		delBtn.addEventListener('click', handleDeleteProject)
+
 		const project = projects.find(p => p.id === projectId);
 		if (project) {
 			document.getElementById('project-title').value = project.title;
@@ -560,14 +597,34 @@ function showProjectModal(projectId = null) {
 			document.getElementById('project-category').value = project.category;
 		}
 	} else {
+		projectDeleteBtn.classList.add('hidden')
 		projectForm.reset();
 	}
 	
+	projectModal.dataset.projectId = projectId
 	projectModal.classList.remove('hidden');
+}
+window.showProjectModal = showProjectModal
+
+async function handleDeleteProject(e) {
+    e.preventDefault();
+	
+	console.log("puto")
+
+    const ok = await customConfirm("¿Estás seguro de que deseas borrar tu proyecto?");
+
+    if (!ok) {
+        console.log("User canceled");
+        return;
+    }
+
+    console.log("User confirmed — proceed");
+    // continue with your logic...
 }
 
 async function handleProjectSubmit(e) {
 	e.preventDefault();
+	
 	
 	const title = document.getElementById('project-title').value;
 	const description = document.getElementById('project-description').value;
@@ -577,8 +634,21 @@ async function handleProjectSubmit(e) {
 	const isEdit = projectModalTitle.textContent === 'Editar Proyecto';
 
 	if (isEdit) {
-		// Find and update project (simplified - in real app we'd know which project to update)
-		showAlert('Funcionalidad de edición no implementada completamente.', 'warning');
+		const projectId = projectModal.dataset.projectId;
+
+		const updatedProject = {
+			title,
+			description,
+			budget: parseInt(budget),
+			category,
+			ownerId: currentUser.id,
+			status: ProjectStatus.OPEN,
+			creationDate: new Date().toISOString()
+		}
+		await projectApi.updateProject(projectId, updatedProject)
+		
+		showAlert('Proyecto editado exitosamente.', 'success');
+		updateMyProjectsContent();
 	} else {
 		// Create new project
 		const newProject = {
@@ -591,7 +661,7 @@ async function handleProjectSubmit(e) {
 			status: ProjectStatus.OPEN,
 			creationDate: new Date().toISOString()
 		};
-		await projectController.addProject(newProject)
+		await projectApi.addProject(newProject)
 		
 		showAlert('Proyecto creado exitosamente.', 'success');
 		updateMyProjectsContent();
@@ -699,6 +769,11 @@ function viewProjectDetails(projectId) {
 	projectCancelBtn.textContent = 'Cerrar';
 	projectModal.classList.remove('hidden');
 }
+window.viewProjectDetails = viewProjectDetails;
+window.closeModal = function (modalName) {
+    const modal = document.getElementById(modalName);
+    modal.classList.add('hidden');
+};
 
 function selectFreelancer(projectId, freelancerId) {
 	// Update project

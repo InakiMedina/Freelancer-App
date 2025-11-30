@@ -12,7 +12,7 @@ const __dirname = dirname(__filename);
 
 const router = express.Router()
 
-router.use('/project', projectsRouter)
+router.use('/api/project', projectsRouter)
 
 const viewsPath = path.resolve(__dirname, "..", "frontend", "views")
 router.get('/', (req, res) => res.sendFile(path.resolve(viewsPath, "home.html")))

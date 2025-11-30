@@ -93,6 +93,12 @@ header {
 	color: var(--primary);
 }
 
+.btn-danger {
+	background-color: rgb(212, 6, 6);
+	color: white;
+
+}
+
 /* Hero Section */
 .hero {
 	background: linear-gradient(135deg, var(--primary), #2980b9);
@@ -297,4 +303,65 @@ header {
 .badge-info {
 	background-color: var(--primary);
 	color: white;
+}
+
+/* X (close) button for modals */
+.x-close-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: transparent;
+    border: none;
+    font-size: 26px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #666;
+    transition: color 0.2s ease, transform 0.1s ease;
+}
+
+.x-close-btn:hover {
+    color: #000;
+    transform: scale(1.15);
+}
+
+.card {
+    position: relative; /* needed so the X button positions correctly */
+}
+
+#secret_group {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+
+.confirm-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999; /* above modal */
+}
+
+.confirm-box {
+    background: #fff;
+    padding: 20px 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    text-align: center;
+    width: 320px;
+}
+
+.confirm-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.confirm-buttons button {
+    min-width: 90px;
 }
