@@ -587,7 +587,7 @@ function showProjectModal(projectId = null) {
 	// 	const btn = document.createElement('button')
 		const delBtn = document.getElementById("project-delete-btn")
 		delBtn.classList.remove('hidden')
-		delBtn.addEventListener('click', handleDeleteProject)
+		delBtn.addEventListener('click', () => confirmProjectDeletion(projectId))
 
 		const project = projects.find(p => p.id === projectId);
 		if (project) {
@@ -606,19 +606,20 @@ function showProjectModal(projectId = null) {
 }
 window.showProjectModal = showProjectModal
 
-async function handleDeleteProject(e) {
-    e.preventDefault();
+async function confirmProjectDeletion(projectId) {
 	
 	console.log("puto")
 
     const ok = await customConfirm("¿Estás seguro de que deseas borrar tu proyecto?");
 
     if (!ok) {
-        console.log("User canceled");
+    	console.log("Not deleteded");
         return;
     }
 
-    console.log("User confirmed — proceed");
+	projectApi.deleteProject(projectId)
+	closeModal("project-modal")
+	updateMyProjectsContent()
     // continue with your logic...
 }
 

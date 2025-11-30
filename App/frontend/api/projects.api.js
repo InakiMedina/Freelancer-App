@@ -29,6 +29,16 @@ export async function addProject(project) {
 	})
 }
 
+export async function deleteProject(id) {
+	return await fetch('http://localhost:3000/api/project/' + id,
+	{
+		method: "DELETE"
+	})
+	.then(async function(response) {
+		return await response.json();
+	})
+}
+
 export async function updateProject(id, project) {
 	return await fetch('http://localhost:3000/api/project/' + id,
 	{

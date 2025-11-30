@@ -36,14 +36,12 @@ POST http://localhost:3000/api/project
 content-type: application/json
 
 {
-	{
-		"id":"_61en2nr6a",
-		"title":"Reporte de Inovacion",
-		"description":"reporte de 3 paginas de una inovacion con entrevistas, evolucion, demos, y market research",
-		"budget":5000,
-		"category":"writing",
-		"ownerId":"_6h47qvz6t",
-		"status":"open",
-		"creationDate":"2025-11-29T22:39:33.199Z"
-	}
+	"id":"_61en2nr6a",
+	"title":"Reporte de Inovacion",
+	"description":"reporte de 3 paginas de una inovacion con entrevistas, evolucion, demos, y market research",
+	"budget":5000,
+	"category":"writing",
+	"ownerId":"_6h47qvz6t",
+	"status":"open",
+	"creationDate":"2025-11-29T22:39:33.199Z"
 }
