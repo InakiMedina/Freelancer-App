@@ -6,7 +6,13 @@ const router = express.Router();
 
 router.get("/", (req, res) => res.json(service.getProjects()));
 
-router.post("/", async (req, res) => {
+router.get("/query", (req, res) => {
+  const [ownerId] = req.query
+
+  return res.json(service.getProjectsFromOwnerId(ownerId))
+})
+
+router.post("/", (req, res) => {
 
   const result = service.createProject(req.body);
 

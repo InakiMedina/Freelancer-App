@@ -509,13 +509,10 @@ function updateMyApplicationsContent() {
 	myApplicationsContent.innerHTML = applicationsHTML;
 }
 
-function updateMyProjectsContent() {
+async function updateMyProjectsContent() {
 	const myProjectsContent = document.getElementById('my-projects-content');
 	
-
-	const myProjects = projects.filter(project => 
-		project.ownerId === currentUser.id
-	);
+	const myProjects = await projectController.getProjectsFromOwnerId(currentUser.id)
 	
 	if (myProjects.length === 0) {
 		myProjectsContent.innerHTML = '<p>No has creado ningún proyecto aún.</p>';
@@ -569,7 +566,7 @@ function showProjectModal(projectId = null) {
 	projectModal.classList.remove('hidden');
 }
 
-function handleProjectSubmit(e) {
+async function handleProjectSubmit(e) {
 	e.preventDefault();
 	
 	const title = document.getElementById('project-title').value;
@@ -594,7 +591,7 @@ function handleProjectSubmit(e) {
 			status: ProjectStatus.OPEN,
 			creationDate: new Date().toISOString()
 		};
-		projectController.addProject(newProject)
+		await projectController.addProject(newProject)
 		
 		showAlert('Proyecto creado exitosamente.', 'success');
 		updateMyProjectsContent();

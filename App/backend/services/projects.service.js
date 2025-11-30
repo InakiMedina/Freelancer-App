@@ -15,6 +15,14 @@ const writeFile = (data) => fs.writeFileSync(filePath, JSON.stringify(data, null
 
 export const getProjects = () => readFile();
 
+export const getProjectsFromOwnerId = (id) => {
+  const data = readFile()
+  
+  return data.filter(project => {
+    project.ownerId == id
+  })
+}
+
 export const createProject = (projectData) => {
 
   const result  = ProjectSchema.safeParse(projectData);  // validation
@@ -29,7 +37,7 @@ export const createProject = (projectData) => {
   const data = readFile();
   data.push(result.data);
   writeFile(data);
-  
+
   return { 
         'success': 201,
         'body': result.data
