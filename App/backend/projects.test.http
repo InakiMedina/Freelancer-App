@@ -2,6 +2,15 @@
 GET http://localhost:3000/api/project
 
 ###
+GET http://localhost:3000/api/project/_c5w7cuzec
+
+###
+GET http://localhost:3000/api/project?ownerId=_6h47qvz6t
+
+###
+GET http://localhost:3000/api/project?status=open
+
+###
 POST http://localhost:3000/api/project
 content-type: application/json
 

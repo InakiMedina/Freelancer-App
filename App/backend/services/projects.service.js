@@ -15,11 +15,27 @@ const writeFile = (data) => fs.writeFileSync(filePath, JSON.stringify(data, null
 
 export const getProjects = () => readFile();
 
-export const getProjectsFromOwnerId = (id) => {
+export const getProjectById = (id) => {
+  const data = readFile()
+  return data.find(project => {
+    return project.id == id
+  })
+  
+}
+
+export const getProjectsByOwnerId = (id) => {
   const data = readFile()
   
   return data.filter(project => {
-    project.ownerId == id
+    return project.ownerId == id
+  })
+}
+
+export const getProjectsByStatus = (status) => {
+  const data = readFile()
+  
+  return data.filter(project => {
+    return project.status == status
   })
 }
 

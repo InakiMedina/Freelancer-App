@@ -1,15 +1,5 @@
 [
   {
-    "id": "_ztkmsy3h6",
-    "title": "su",
-    "description": "puta",
-    "budget": 500,
-    "category": "design",
-    "ownerId": "_6h47qvz6t",
-    "status": "open",
-    "creationDate": "2025-11-29T23:24:03.115Z"
-  },
-  {
     "id": "_c5w7cuzec",
     "title": "Proyecto Final Web",
     "description": "ayudenme haciendo un proyecto de web para mi clase. JS, Node, Express y Mongo con opcional boostrap.",

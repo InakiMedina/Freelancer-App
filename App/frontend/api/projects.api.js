@@ -6,9 +6,41 @@ export async function getProjects() {
 	})
 }
 
-export async function getProjectsFromOwnerId(id) {
+export async function getProjectById(id) {
+
+	return await fetch('http://localhost:3000/api/project/' + id)
+	.then(async function(response) {
+		return await response.json();
+	})
+}
+
+export async function getProjectsByOwnerId(id) {
 
 	return await fetch('http://localhost:3000/api/project/?ownerId=' + id)
+	.then(async function(response) {
+		return await response.json();
+	})
+}
+
+export async function getProjectsByStatus(status) {
+
+	return await fetch('http://localhost:3000/api/project/?status=' + status)
+	.then(async function(response) {
+		return await response.json();
+	})
+}
+
+export async function getOpenProjectsByFree(id) {
+
+	return await fetch('http://localhost:3000/api/project/?status=open&freelancerId=' + id)
+	.then(async function(response) {
+		return await response.json();
+	})
+}
+
+export async function getDoneProjectsByFree(id) {
+
+	return await fetch('http://localhost:3000/api/project/?status=done&freelancerId=' + id)
 	.then(async function(response) {
 		return await response.json();
 	})

@@ -1,6 +1,9 @@
 import * as projectApi from '../api/projects.api.js'
+import * as userApi from '../api/users.api.js'
 
 // Data Models
+const cache = {}
+
 const UserTypes = {
 	FREELANCER: 'freelancer',
 	CLIENT: 'client'
@@ -21,7 +24,6 @@ const ApplicationStatus = {
 
 // Sample Data (in a real app, this would come from a backend)
 let users = JSON.parse(localStorage.getItem('users')) || [];
-let projects = JSON.parse(localStorage.getItem('projects')) || [];
 let applications = JSON.parse(localStorage.getItem('applications')) || [];
 let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
 
@@ -61,8 +63,8 @@ const projectModal = document.getElementById('project-modal');
 const projectModalTitle = document.getElementById('project-modal-title');
 const projectForm = document.getElementById('project-form');
 const projectSubmitBtn = document.getElementById('project-submit-btn');
-const projectCancelBtn = document.getElementById('project-cancel-btn');
-const projectDeleteBtn = document.getElementById('project-delete-btn')
+let projectCancelBtn = document.getElementById('project-cancel-btn');
+let projectDeleteBtn = document.getElementById('project-delete-btn')
 const projectApplicantsGroup = document.getElementById('project-applicants-group');
 
 // Generates the X button HTML
@@ -131,10 +133,7 @@ function setupEventListeners() {
 		});
 	});
 	
-	// Project Modal
-	projectCancelBtn.addEventListener('click', () => {
-		projectModal.classList.add('hidden');
-	});
+
 	
 	projectForm.addEventListener('submit', handleProjectSubmit);
 	
@@ -238,7 +237,7 @@ function toggleAuthMode(e) {
 	setAuthMode(isLogin ? 'register' : 'login');
 }
 
-function handleAuth(e) {
+async function handleAuth(e) {
 	e.preventDefault();
 	
 	const email = document.getElementById('email').value;
@@ -246,7 +245,7 @@ function handleAuth(e) {
 	
 	if (authTitle.textContent === 'Iniciar Sesión') {
 		// Login
-		const user = users.find(u => u.email === email && u.password === password);
+		const user = await userApi.login(email, password)
 		
 		if (user) {
 			currentUser = user;
@@ -263,7 +262,7 @@ function handleAuth(e) {
 		const cvFile = document.getElementById('cv').files[0];
 		
 		// Check if user already exists
-		if (users.find(u => u.email === email)) {
+		if (!await userApi.getUserByEmail(email)) {
 			showAlert('Ya existe un usuario con este correo electrónico.', 'danger');
 			return;
 		}
@@ -276,18 +275,17 @@ function handleAuth(e) {
 			password,
 			type: userType,
 			registrationDate: new Date().toISOString(),
-			rating: userType === UserTypes.FREELANCER ? 0 : null,
+			rating: 0,
+			raitingCount: 0,
 			educationLevel: '',
 			occupation: '',
 			currentWork: '',
 			cv: cvFile ? cvFile.name : '',
 			projects: []
 		};
-		
-		users.push(newUser);
-		localStorage.setItem('users', JSON.stringify(users));
-		
+	
 		currentUser = newUser;
+		await userApi.addUser(newUser)
 		localStorage.setItem('currentUser', JSON.stringify(currentUser));
 		
 		updateNavigation();
@@ -307,13 +305,18 @@ function updateDashboard() {
 	dashboardGreeting.textContent = `Hola, ${currentUser.name}`;
 	
 	// Show/hide menu items based on user type
-	if (currentUser.type === UserTypes.FREELANCER) {
+
+	if (currentUser.type === UserTypes.FREELANCER) 
 		freelancerOnly.classList.remove('hidden');
-		clientOnly.classList.add('hidden');
-	} else {
+	else 
 		freelancerOnly.classList.add('hidden');
+	
+
+	if (currentUser.type === UserTypes.CLIENT) 
+		clientOnly.classList.add('hidden');
+	else
 		clientOnly.classList.remove('hidden');
-	}
+		
 	
 	// Update overview content
 	updateOverviewContent();
@@ -354,7 +357,9 @@ function showDashboardSection(section) {
 	}
 }
 
-function updateOverviewContent() {
+window.showDashboardSection = showDashboardSection
+
+async function updateOverviewContent() {
 	const overviewContent = document.getElementById('overview-content');
 	
 	if (currentUser.type === UserTypes.FREELANCER) {
@@ -362,17 +367,14 @@ function updateOverviewContent() {
 			app.freelancerId === currentUser.id
 		);
 		
-		const activeProjects = projects.filter(project => 
-			project.status === ProjectStatus.IN_PROGRESS && 
-			project.assignedFreelancerId === currentUser.id
-		);
+		const activeProjects = await projectApi.getOpenProjectsByFree(currentUser.id)
 		
 		overviewContent.innerHTML = `
 			<div class="card">
 				<h3 class="card-title">Resumen de Actividad</h3>
 				<p><strong>Postulaciones activas:</strong> ${myApplications.filter(app => app.status === ApplicationStatus.PENDING).length}</p>
 				<p><strong>Proyectos en curso:</strong> ${activeProjects.length}</p>
-				<p><strong>Proyectos completados:</strong> ${projects.filter(p => p.status === ProjectStatus.COMPLETED && p.assignedFreelancerId === currentUser.id).length}</p>
+				<p><strong>Proyectos completados:</strong> ${await projectApi.getDoneProjectsByFree(currentUser.id).length}</p>
 				<p><strong>Rating promedio:</strong> ${currentUser.rating || 'Sin calificaciones'}</p>
 			</div>
 			<div class="card">
@@ -382,10 +384,7 @@ function updateOverviewContent() {
 			</div>
 		`;
 	} else {
-		const myProjects = projects.filter(project => 
-			project.ownerId === currentUser.id
-		);
-		
+		const myProjects = await projectApi.getProjectsByOwnerId(currentUser.id)
 		overviewContent.innerHTML = `
 			<div class="card">
 				<h3 class="card-title">Resumen de Actividad</h3>
@@ -438,7 +437,7 @@ function updateProfileContent() {
 		</form>
 	`;
 	
-	document.getElementById('profile-form').addEventListener('submit', (e) => {
+	document.getElementById('profile-form').addEventListener('submit', async (e) => {
 		e.preventDefault();
 		
 		// Update user data
@@ -459,8 +458,7 @@ function updateProfileContent() {
 		// Update in users array
 		const userIndex = users.findIndex(u => u.id === currentUser.id);
 		if (userIndex !== -1) {
-			users[userIndex] = currentUser;
-			localStorage.setItem('users', JSON.stringify(users));
+			await userApi.updateUser(currentUser.id, currentUser)
 			localStorage.setItem('currentUser', JSON.stringify(currentUser));
 		}
 		
@@ -468,12 +466,10 @@ function updateProfileContent() {
 	});
 }
 
-function updateProjectsContent() {
+async function updateProjectsContent() {
 	const projectsContent = document.getElementById('projects-content');
 	
-	const openProjects = projects.filter(project => 
-		project.status === ProjectStatus.OPEN
-	);
+	const openProjects = await projectApi.getProjectsByStatus(ProjectStatus.OPEN)
 	
 	if (openProjects.length === 0) {
 		projectsContent.innerHTML = '<p>No hay proyectos disponibles en este momento.</p>';
@@ -544,7 +540,7 @@ function updateMyApplicationsContent() {
 async function updateMyProjectsContent() {
 	const myProjectsContent = document.getElementById('my-projects-content');
 	
-	const myProjects = await projectApi.getProjectsFromOwnerId(currentUser.id)
+	const myProjects = await projectApi.getProjectsByOwnerId(currentUser.id)
 	
 	if (myProjects.length === 0) {
 		myProjectsContent.innerHTML = '<p>No has creado ningún proyecto aún.</p>';
@@ -577,19 +573,30 @@ async function updateMyProjectsContent() {
 }
 
 // Project Functions
-function showProjectModal(projectId = null) {
+async function showProjectModal(projectId = null) {
+	if (!document.getElementById('project-description'))
+		projectForm.innerHTML = cache.formData
 	const isEdit = projectId !== null;
+
+	const projectCancelBtn = document.getElementById('project-cancel-btn');
+	const projectDeleteBtn = document.getElementById('project-delete-btn')
+
+	projectCancelBtn.addEventListener('click', () => {
+		projectModal.classList.add('hidden');
+	});
+
 	projectModalTitle.textContent = isEdit ? 'Editar Proyecto' : 'Crear Proyecto';
 	projectSubmitBtn.textContent = isEdit ? 'Actualizar' : 'Crear';
 	projectApplicantsGroup.style.display = 'none';
 	
 	if (isEdit) {
-	// 	const btn = document.createElement('button')
-		const delBtn = document.getElementById("project-delete-btn")
-		delBtn.classList.remove('hidden')
-		delBtn.addEventListener('click', () => confirmProjectDeletion(projectId))
+		
+		projectDeleteBtn.classList.remove('hidden')	
+		projectDeleteBtn.addEventListener('click', () => confirmProjectDeletion(projectId))
 
-		const project = projects.find(p => p.id === projectId);
+		const project = await projectApi.getProjectById(projectId);
+
+
 		if (project) {
 			document.getElementById('project-title').value = project.title;
 			document.getElementById('project-description').value = project.description;
@@ -602,20 +609,18 @@ function showProjectModal(projectId = null) {
 	}
 	
 	projectModal.dataset.projectId = projectId
-	projectModal.classList.remove('hidden');
+	//projectModal.classList.remove('hidden');
+	projectModal.classList.remove('hidden')
 }
 window.showProjectModal = showProjectModal
 
 async function confirmProjectDeletion(projectId) {
-	
-	console.log("puto")
 
     const ok = await customConfirm("¿Estás seguro de que deseas borrar tu proyecto?");
 
-    if (!ok) {
-    	console.log("Not deleteded");
-        return;
-    }
+    if (!ok) 
+        return
+    
 
 	projectApi.deleteProject(projectId)
 	closeModal("project-modal")
@@ -672,7 +677,7 @@ async function handleProjectSubmit(e) {
 }
 
 function applyToProject(projectId) {
-	if (currentUser.type !== UserTypes.FREELANCER) {
+	if (currentUser.type === UserTypes.CLIENT) {
 		showAlert('Solo los freelancers pueden postularse a proyectos.', 'danger');
 		return;
 	}
@@ -702,10 +707,10 @@ function applyToProject(projectId) {
 	showAlert('Te has postulado al proyecto exitosamente.', 'success');
 	updateProjectsContent();
 }
+window.applyToProject = applyToProject
 
-function viewProjectDetails(projectId) {
-	const project = projects.find(p => p.id === projectId);
-	if (!project) return;
+async function viewProjectDetails(projectId) {
+	const project = await projectApi.getProjectById(projectId)
 	
 	const owner = users.find(u => u.id === project.ownerId);
 	const projectApplications = applications.filter(app => app.projectId === projectId);
@@ -765,6 +770,7 @@ function viewProjectDetails(projectId) {
 	
 	// Show modal with project details
 	projectModalTitle.textContent = 'Detalles del Proyecto';
+	cache.formData = projectForm.innerHTML
 	projectForm.innerHTML = modalContent;
 	projectSubmitBtn.style.display = 'none';
 	projectCancelBtn.textContent = 'Cerrar';

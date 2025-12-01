@@ -4,12 +4,28 @@ import * as service from "../services/projects.service.js";
 
 const router = express.Router();
 
-router.get("/", (req, res) => res.json(service.getProjects()));
+router.get("/", (req, res) => {
+  const {ownerId, status, freelancerId} = req.query
+  
+  if (ownerId)
+    return res.json(service.getProjectsByOwnerId(ownerId))
 
-router.get("/query", (req, res) => {
-  const [ownerId] = req.query
+  let projects = []
+  
+  if (status)
+    projects = service.getProjectsByStatus(status)
+  else 
+    projects = service.getProjects()
 
-  return res.json(service.getProjectsFromOwnerId(ownerId))
+  if (freelancerId)
+    projects = projects.filter(p => p.assignedFreelancerId == freelancerId)
+
+  return res.json(projects)
+})
+
+router.get("/:id", (req, res) => {
+  console.log(req.params.id)
+  return res.json(service.getProjectById(req.params.id))
 })
 
 router.post("/", (req, res) => {
