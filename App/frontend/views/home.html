@@ -6,13 +6,17 @@
         <title>FreelanceHub - Plataforma de Contratación</title>
         <link rel="stylesheet" href="/styles/home.css">
         <script type="module" src="/scripts/home.js" defer></script>
+        <script src="https://kit.fontawesome.com/0b85ae3fb7.js" crossorigin="anonymous"></script>
     </head>
     <body>
         <!-- Header -->
         <header>
             <div class="container">
                 <nav class="navbar">
-                    <div class="logo">FreelanceHub</div>
+                    <div class="logo">
+                        <img src="/images/spear.png" height="50px">
+                        <div style="margin-top: 7px">FreelanceHub</div>
+                    </div>
                     <ul class="nav-links">
                         <li><a href="#" id="nav-home">Inicio</a></li>
                         <li><a href="#" id="nav-projects">Proyectos</a></li>
@@ -103,8 +107,8 @@
                         <ul class="sidebar-menu">
                             <li><a href="#" class="dashboard-link active" data-section="overview">Resumen</a></li>
                             <li><a href="#" class="dashboard-link" data-section="profile">Mi Perfil</a></li>
-                            <li><a href="#" class="dashboard-link" data-section="projects">Proyectos</a></li>
-                            <li id="freelancer-only" class="hidden"><a href="#" class="dashboard-link" data-section="my-applications">Mis Postulaciones</a></li>
+                            <li id="project" class="hidden freelancer-only"><a href="#" class="  dashboard-link" data-section="projects">Proyectos</a></li>
+                            <li id="postulations" class="hidden freelancer-only"><a href="#" class=" dashboard-link" data-section="my-applications">Mis Postulaciones</a></li>
                             <li id="client-only" class="hidden"><a href="#" class="dashboard-link" data-section="my-projects">Mis Proyectos</a></li>
                         </ul>
                     </div>
@@ -195,7 +199,7 @@
                         </div>
                     </div>
                     <div id="secret_group">
-                        <button type="button" class="btn btn-danger hidden" id="project-delete-btn">Destruir Proyecto</button>
+                        <button type="button" class="btn btn-danger hidden" id="project-delete-btn">Destruir Proyecto <i class="fa-solid fa-trash trash-icon"></i></button>
                     </div>
                     <div class="form-group" style="display: flex; gap: 10px;">
                         <button type="submit" class="btn btn-primary" id="project-submit-btn">Guardar</button>

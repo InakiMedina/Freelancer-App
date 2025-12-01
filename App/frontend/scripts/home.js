@@ -53,7 +53,7 @@ const cvGroup = document.getElementById('cv-group');
 
 // Dashboard Elements
 const dashboardGreeting = document.getElementById('dashboard-greeting');
-const freelancerOnly = document.getElementById('freelancer-only');
+const freelancerOnly = Array.prototype.slice.call(document.getElementsByClassName('freelancer-only'));
 const clientOnly = document.getElementById('client-only');
 const dashboardLinks = document.querySelectorAll('.dashboard-link');
 const dashboardContents = document.querySelectorAll('.dashboard-content');
@@ -262,7 +262,7 @@ async function handleAuth(e) {
 		const cvFile = document.getElementById('cv').files[0];
 		
 		// Check if user already exists
-		if (!await userApi.getUserByEmail(email)) {
+		if (await userApi.getUserByEmail(email)) {
 			showAlert('Ya existe un usuario con este correo electrónico.', 'danger');
 			return;
 		}
@@ -305,17 +305,17 @@ function updateDashboard() {
 	dashboardGreeting.textContent = `Hola, ${currentUser.name}`;
 	
 	// Show/hide menu items based on user type
-
+	
 	if (currentUser.type === UserTypes.FREELANCER) 
-		freelancerOnly.classList.remove('hidden');
+		freelancerOnly.forEach(f => f.classList.remove('hidden'));
 	else 
-		freelancerOnly.classList.add('hidden');
+		freelancerOnly.forEach(f =>f.classList.add('hidden'));
 	
 
 	if (currentUser.type === UserTypes.CLIENT) 
-		clientOnly.classList.add('hidden');
-	else
 		clientOnly.classList.remove('hidden');
+	else
+		clientOnly.classList.add('hidden');
 		
 	
 	// Update overview content

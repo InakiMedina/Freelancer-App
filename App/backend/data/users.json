@@ -13,5 +13,20 @@
     "currentWork": "",
     "cv": "",
     "currentProjects": []
+  },
+  {
+    "id": "_j92psyqo7",
+    "name": "free",
+    "email": "inaki.medina@iteso.mx",
+    "password": "free",
+    "rating": 0,
+    "raitingCount": 0,
+    "type": "freelancer",
+    "registrationDate": "2025-12-01T03:03:05.375Z",
+    "educationLevel": "",
+    "occupation": "",
+    "currentWork": "",
+    "cv": "",
+    "currentProjects": []
   }
 ]

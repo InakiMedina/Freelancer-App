@@ -40,6 +40,11 @@ router.put("/:id", (req, res) => {
   res.json(updated);
 });
 
+router.delete("/", (req, res) => {
+  service.deleteAllProjects();
+  res.status(204).send();
+});
+
 router.delete("/:id", (req, res) => {
   service.deleteProject(req.params.id);
   res.status(204).send();
