@@ -45,6 +45,7 @@ const navLogout = document.getElementById('nav-logout');
 const authTitle = document.getElementById('auth-title');
 const authForm = document.getElementById('auth-form');
 const authAlert = document.getElementById('auth-alert');
+const mainAlert = document.getElementById('main-alert');
 const authSubmitBtn = document.getElementById('auth-submit-btn');
 const authSwitchText = document.getElementById('auth-switch-text');
 const authSwitchLink = document.getElementById('auth-switch-link');
@@ -254,7 +255,7 @@ async function handleAuth(e) {
 			updateNavigation();
 			showDashboard();
 		} else {
-			showAlert('Credenciales incorrectas. Inténtalo de nuevo.', 'danger');
+			showAlert('Credenciales incorrectas. Inténtalo de nuevo.', authAlert, 'danger');
 		}
 	} else {
 		// Register
@@ -264,7 +265,7 @@ async function handleAuth(e) {
 		
 		// Check if user already exists
 		if (await userApi.getUserByEmail(email)) {
-			showAlert('Ya existe un usuario con este correo electrónico.', 'danger');
+			showAlert('Ya existe un usuario con este correo electrónico.', authAlert, 'danger');
 			return;
 		}
 		
@@ -343,6 +344,7 @@ function showDashboardSection(section) {
 	document.querySelector(`[data-section="${section}"]`).classList.add('active');
 	
 	// Load section content
+	console.log(section)
 	switch(section) {
 		case 'overview':
 			updateOverviewContent();
@@ -467,7 +469,7 @@ function updateProfileContent() {
 			localStorage.setItem('currentUser', JSON.stringify(currentUser));
 		}
 		
-		showAlert('Perfil actualizado correctamente.', 'success');
+		showAlert('Perfil actualizado correctamente.', authAlert, 'success');
 	});
 }
 
@@ -541,6 +543,7 @@ async function updateMyApplicationsContent() {
 
 async function updateMyProjectsContent() {
 	const myProjectsContent = document.getElementById('my-projects-content');
+	myProjectsContent.innerHTML = ""
 	
 	const myProjects = await projectApi.getProjectsByOwnerId(currentUser.id)
 	
@@ -575,8 +578,8 @@ async function updateMyProjectsContent() {
 
 // Project Functions
 async function showProjectModal(projectId = null) {
-	if (!document.getElementById('project-description'))
-		projectForm.innerHTML = cache.formData
+	// if (!document.getElementById('project-description'))
+	// 	projectForm.innerHTML = cache.formData
 	const isEdit = projectId !== null;
 
 	const projectCancelBtn = document.getElementById('project-cancel-btn');
@@ -610,7 +613,8 @@ async function showProjectModal(projectId = null) {
 	}
 	
 	projectModal.dataset.projectId = projectId
-	//projectModal.classList.remove('hidden');
+	showInfoModalForm.classList.add('hidden');
+	editModalForm.classList.remove('hidden');
 	projectModal.classList.remove('hidden')
 }
 window.showProjectModal = showProjectModal
@@ -654,7 +658,7 @@ async function handleProjectSubmit(e) {
 		}
 		await projectApi.updateProject(projectId, updatedProject)
 		
-		showAlert('Proyecto editado exitosamente.', 'success');
+		showAlert('Proyecto editado exitosamente.', mainAlert, 'success');
 		updateMyProjectsContent();
 	} else {
 		// Create new project
@@ -669,7 +673,7 @@ async function handleProjectSubmit(e) {
 		};
 		await projectApi.addProject(newProject)
 		
-		showAlert('Proyecto creado exitosamente.', 'success');
+		showAlert('Proyecto creado exitosamente.', mainAlert, 'success');
 		updateMyProjectsContent();
 	}
 	
@@ -678,14 +682,13 @@ async function handleProjectSubmit(e) {
 
 async function applyToProject(projectId) {
 	if (currentUser.type === UserTypes.CLIENT) {
-		showAlert('Solo los freelancers pueden postularse a proyectos.', 'danger');
+		showAlert('Solo los freelancers pueden postularse a proyectos.', mainAlert, 'danger');
 		return;
 	}
 
 	// Check if already applied
-	
-	if (await applicantApi.doesApplicationExisist(projectId)) {
-		showAlert('Ya te has postulado a este proyecto.', 'warning');
+	if (await applicantApi.doesApplicationExist(projectId, currentUser.id)) {
+		showAlert('Ya te has postulado a este proyecto.', mainAlert, 'warning');
 		return;
 	}
 	
@@ -698,7 +701,7 @@ async function applyToProject(projectId) {
 	await applicantApi.createApplication(newApplication);
 	localStorage.setItem('applications', JSON.stringify(applications));
 	
-	showAlert('Te has postulado al proyecto exitosamente.', 'success');
+	showAlert('Te has postulado al proyecto exitosamente.', mainAlert, 'success');
 	updateProjectsContent();
 }
 window.applyToProject = applyToProject
@@ -761,10 +764,12 @@ async function viewProjectDetails(projectId) {
 	
 	// Show modal with project details
 	projectModalTitle.textContent = 'Detalles del Proyecto';
-	cache.formData = projectForm.innerHTML
-	projectForm.innerHTML = modalContent;
+	// cache.formData = projectForm.innerHTML
+	showInfoModalForm.innerHTML = modalContent;
 	projectSubmitBtn.style.display = 'none';
 	projectCancelBtn.textContent = 'Cerrar';
+	showInfoModalForm.classList.remove('hidden');
+	editModalForm.classList.add('hidden');
 	projectModal.classList.remove('hidden');
 }
 window.viewProjectDetails = viewProjectDetails;
@@ -773,36 +778,23 @@ window.closeModal = function (modalName) {
     modal.classList.add('hidden');
 };
 
-function selectFreelancer(projectId, freelancerId) {
+async function selectFreelancer(projectId, freelancerId) {
 	// Update project
-	const projectIndex = projects.findIndex(p => p.id === projectId);
-	if (projectIndex !== -1) {
-		projects[projectIndex].assignedFreelancerId = freelancerId;
-		projects[projectIndex].status = ProjectStatus.IN_PROGRESS;
-		localStorage.setItem('projects', JSON.stringify(projects));
+	const project = await projectApi.getProjectById(projectId);
+	if (project) {
+		project.assignedFreelancerId = freelancerId;
+		project.status = ProjectStatus.IN_PROGRESS;
+		await projectApi.updateProject(projectId, project)
 	}
 	
 	// Update application status
-	const applicationIndex = applications.findIndex(app => 
-		app.projectId === projectId && app.freelancerId === freelancerId
-	);
-	if (applicationIndex !== -1) {
-		applications[applicationIndex].status = ApplicationStatus.ACCEPTED;
-		localStorage.setItem('applications', JSON.stringify(applications));
-	}
+	await applicantApi.acceptApplicant(projectId, freelancerId)
 	
-	// Reject other applications
-	applications.forEach(app => {
-		if (app.projectId === projectId && app.freelancerId !== freelancerId) {
-			app.status = ApplicationStatus.REJECTED;
-		}
-	});
-	localStorage.setItem('applications', JSON.stringify(applications));
-	
-	showAlert('Freelancer seleccionado exitosamente.', 'success');
+	showAlert('Freelancer seleccionado exitosamente.', mainAlert, 'success');
 	projectModal.classList.add('hidden');
 	updateMyProjectsContent();
 }
+window.selectFreelancer = selectFreelancer
 
 function completeProject(projectId) {
 	const projectIndex = projects.findIndex(p => p.id === projectId);
@@ -810,25 +802,26 @@ function completeProject(projectId) {
 		projects[projectIndex].status = ProjectStatus.COMPLETED;
 		localStorage.setItem('projects', JSON.stringify(projects));
 		
-		showAlert('Proyecto marcado como completado.', 'success');
+		showAlert('Proyecto marcado como completado.', mainAlert, 'success');
 		projectModal.classList.add('hidden');
 		updateOverviewContent();
 	}
 }
 
-function showAlert(message, type) {
-	authAlert.textContent = message;
-	authAlert.className = `alert alert-${type}`;
-	authAlert.classList.remove('hidden');
+function showAlert(message, element, type) {
+	element.textContent = message;
+	element.className = `alert alert-${type}`;
+	element.classList.remove('hidden');
 	
 	// Auto-hide after 5 seconds
 	setTimeout(() => {
-		hideAlert();
+		console.log(element)
+		hideAlert(element);
 	}, 5000);
 }
 
-function hideAlert() {
-	authAlert.classList.add('hidden');
+function hideAlert(element) {
+	element.classList.add('hidden');
 }
 
 function formatCategory(category) {

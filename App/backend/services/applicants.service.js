@@ -64,6 +64,22 @@ export const getApplicationsByFreelancerId = (freelancerId) => {
 };
 
 /**
+ * Get status of an application by its project and freelancer id
+ * @param {string} projectId The ID of the project.
+ * @param {string} freelancerId The ID of the freelancer.
+ * @returns {string} the status of the app
+ */
+
+export const getStatusOfApplication = (projectId, freelancerId) => {
+    const data = readFile();
+    return data.map(app => {
+        if( app.freelancerId === freelancerId &&
+        app.projectId === projectId)
+            return app
+    })
+};
+
+/**
  * Get applications submitted by a specific freelancer.
  * @param {string} freelancerId The ID of the freelancer.
  * @param {string} projectId The ID of the freelancer.
@@ -110,6 +126,9 @@ export const getApplicantsByProjectId = (projectId) => {
  * @returns {object} The result object containing success status and body (new application or error).
  */
 export const createApplication = (applicationData) => {
+    if (!applicationData.status)
+        applicationData.status = 'accepted'
+    
     const result = AplicantsSchema.safeParse(applicationData); // validation
     if (!result.success) {
         return {
@@ -187,4 +206,35 @@ export const deleteApplicationsByFreelancerId = (freelancerId) => {
  */
 export const deleteAllApplications = () => {
     writeFile([]);
+};
+
+/**
+ * Updates the status a specific application by project ID and freelancer ID
+ * @param {string} freelancerId The ID of the freelancer.
+ * @param {string} projectId The ID of the project.
+ */
+export const acceptApplicant = (projectId, freelancerId) => {
+    const data = readFile();
+    const index = data.findIndex(app =>
+        (app.projectId === projectId && app.freelancerId === freelancerId)
+    )
+
+    if (index == -1)
+        return {
+        'success': 404,
+        'error': 'application not found'
+    }
+
+    data.forEach((app, i) => {
+        if(i == index)
+            app.status = "accepted"
+        else
+            app.status = "declined"
+    })
+
+    return {
+        'success': 202,
+        'error': 'application status updated'
+    }
+
 };

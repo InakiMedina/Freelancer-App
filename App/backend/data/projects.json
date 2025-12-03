@@ -33,11 +33,12 @@
     "id": "3cbe5ed1-f660-4348-9703-b2ff9e8c0ff6",
     "title": "Practica de Github",
     "description": "investigar que es jenkins y hacer un reporte de una pagina",
-    "budget": 50,
+    "budget": 49,
     "category": "writing",
     "ownerId": "_y9ogn5t6w",
-    "status": "open",
-    "creationDate": "2025-12-02T12:39:33.199Z"
+    "status": "in_progress",
+    "creationDate": "2025-12-03T19:32:33.381Z",
+    "assignedFreelancerId": "_ig11hcoez"
   },
   {
     "id": "1cb39ebb-f000-47e5-a1f2-ede228c97cf7",
@@ -46,7 +47,28 @@
     "budget": 500,
     "category": "mobile-developmen",
     "ownerId": "_y9ogn5t6w",
+    "status": "in_progress",
+    "creationDate": "2025-12-01T22:39:33.199Z",
+    "assignedFreelancerId": "_ig11hcoez"
+  },
+  {
+    "id": "0994d0fe-7a18-4d02-9e1f-0ff68cc3ea38",
+    "title": "Practica de Github",
+    "description": "investigar que es jenkins y hacer un reporte de una pagina",
+    "budget": 49,
+    "category": "writing",
+    "ownerId": "_y9ogn5t6w",
     "status": "open",
-    "creationDate": "2025-12-01T22:39:33.199Z"
+    "creationDate": "2025-12-03T19:48:14.100Z"
+  },
+  {
+    "id": "74a94461-3d8a-4cf9-a9d7-ff58f369e0e7",
+    "title": "Practica de Github",
+    "description": "investigar que es jenkins y hacer un reporte de una pagina",
+    "budget": 49,
+    "category": "writing",
+    "ownerId": "_y9ogn5t6w",
+    "status": "open",
+    "creationDate": "2025-12-03T20:56:32.050Z"
   }
 ]

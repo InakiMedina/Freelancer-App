@@ -47,7 +47,7 @@ export async function getApplicationsByFreelancerId(freelancerId) {
  * @param {string} projectId The ID of the project.
  * @returns {Promise<Boolean>} 
  */
-export async function doesApplicationExisist(freelancerId, projectId) {
+export async function doesApplicationExist(projectId, freelancerId) {
     return await fetch(`${API_BASE_URL}?freelancerId=${freelancerId}&projectId=${projectId}`)
         .then(async function(response) {
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
@@ -75,6 +75,20 @@ export async function getProjectsByApplicantId(freelancerId) {
  */
 export async function getApplicantsByProjectId(projectId) {
     return await fetch(`${API_BASE_URL}/freelancers/${projectId}`)
+        .then(async function(response) {
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            return await response.json();
+        });
+}
+
+/**
+ * Fetches the status of an application by sending its project and freelancer Id
+ * @param {string} projectId The ID of the project.
+ * @param {string} freelancerId The ID of the freelancer.
+ * @returns {Promise<Array>} 
+ */
+export async function getStatusOfApplication(projectId, freelancerId) {
+    return await fetch(`${API_BASE_URL}/${projectId}/${freelancerId}`)
         .then(async function(response) {
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             return await response.json();
@@ -145,5 +159,20 @@ export async function deleteApplicationsByFreelancerId(freelancerId) {
 export async function deleteAllApplications() {
     return await fetch(API_BASE_URL, {
         method: "DELETE"
+    });
+}
+
+// --- UPDATE Requests ---
+
+/**
+ * Changes the application status to accepted of said application and rejects the rest
+ * @param {string} projectId The ID of the project.
+ * @param {string} freelancerId The ID of the freelancer.
+ * @returns {Promise<Response>} A promise that resolves to the fetch Response object (status 204 on success).
+ */
+
+export async function acceptApplicant(projectId, freelancerId) {
+    return await fetch(`${API_BASE_URL}/${projectId}/${freelancerId}`, {
+        method: "PUT"
     });
 }

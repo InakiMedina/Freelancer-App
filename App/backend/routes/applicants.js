@@ -40,6 +40,10 @@ router.get("/freelancers/:id", (req, res) => {
     return res.json(service.getApplicantsByProjectId(req.params.id))
 })
 
+router.get("/:projectId/:freelancerId", (req, res) => {
+    return res.json(service.getStatusOfApplication(req.params.id))
+})
+
 /**
  * POST /applicants
  * Creates a new application.
@@ -87,6 +91,17 @@ router.delete("/:projectId/:freelancerId", (req, res) => {
     const { projectId, freelancerId } = req.params;
     service.deleteApplication(projectId, freelancerId);
     res.status(204).send();
+});
+
+/**
+ * UPDATE /applicants/accept/:projectId/:freelancerId
+ * Updates the status a specific application by project ID and freelancer ID to accepted
+ * and rejects the other ones.
+ */
+router.put("/:projectId/:freelancerId", (req, res) => {
+    const { projectId, freelancerId } = req.params;
+    const msg = service.acceptApplicant(projectId, freelancerId);
+    res.status(msg.status).send();
 });
 
 export const applicantsRouter = router;
