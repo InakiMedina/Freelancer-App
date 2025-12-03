@@ -46,7 +46,6 @@ router.get("/freelancers/:id", (req, res) => {
  * Request body should contain { projectId, freelancerId }.
  */
 router.post("/", (req, res) => {
-    console.log("here")
     const result = service.createApplication(req.body);
 
     // Return the response with the appropriate status code (201 for success, 409 for conflict/validation)

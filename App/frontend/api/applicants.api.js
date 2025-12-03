@@ -47,7 +47,7 @@ export async function getApplicationsByFreelancerId(freelancerId) {
  * @param {string} projectId The ID of the project.
  * @returns {Promise<Boolean>} 
  */
-export async function doesApplicationExisist(freelancerId) {
+export async function doesApplicationExisist(freelancerId, projectId) {
     return await fetch(`${API_BASE_URL}?freelancerId=${freelancerId}&projectId=${projectId}`)
         .then(async function(response) {
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
@@ -74,7 +74,7 @@ export async function getProjectsByApplicantId(freelancerId) {
  * @returns {Promise<Array>} 
  */
 export async function getApplicantsByProjectId(projectId) {
-    return await fetch(`${API_BASE_URL}/freelancer/${projectId}`)
+    return await fetch(`${API_BASE_URL}/freelancers/${projectId}`)
         .then(async function(response) {
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             return await response.json();

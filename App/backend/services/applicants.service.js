@@ -169,7 +169,6 @@ export const deleteApplication = (projectId, freelancerId) => {
 export const deleteApplicationsByProjectId = (projectId) => {
     const data = readFile();
     const filtered = data.filter(app => app.projectId !== projectId);
-    console.log(projectId)
     writeFile(filtered);
 };
 

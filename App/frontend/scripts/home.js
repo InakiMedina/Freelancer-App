@@ -524,14 +524,11 @@ async function updateMyApplicationsContent() {
 	applicationsHTML.classList.add('project-grid')
 
 	
-	projectsApliedTo.forEach(async app => {
-		const project = await projectApi.getProjectById(app.projectId)
-		if (project == undefined) return;
+	projectsApliedTo.forEach(async project => {
 		
 		const tmp = `<div class="project-card">
 				<h3 class="card-title">${project.title}</h3>
 				<p>${project.description.substring(0, 100)}...</p>
-				<p><strong>Estado:</strong> ${formatApplicationStatus(app.status)}</p>
 				<p><strong>Presupuesto:</strong> $${project.budget}</p>
 				<button class="btn btn-outline mt-20" onclick="viewProjectDetails('${project.id}')">Ver Detalles</button>
 			</div>`
@@ -552,20 +549,20 @@ async function updateMyProjectsContent() {
 		return;
 	}
 	
-	let projectsHTML = '<div class="project-grid">';
-	
-	myProjects.forEach(project => {
-		const applicants = applications.filter(app => app.projectId === project.id);
-		const assignedFreelancer = project.assignedFreelancerId ? 
-			users.find(u => u.id === project.assignedFreelancerId) : null;
-		
-		projectsHTML += `
+	let projectsHTML = document.createElement("div")
+	projectsHTML.classList.add("project-grid")
+
+	myProjects.forEach(async project => {
+		const apps = await applicantApi.getApplicationsByProjectId(project.id)
+		const assignedFreelancer = project.assignedFreelancer
+
+		projectsHTML.innerHTML += `
 			<div class="project-card">
 				<h3 class="card-title">${project.title}</h3>
 				<p>${project.description.substring(0, 100)}...</p>
 				<p><strong>Estado:</strong> ${formatProjectStatus(project.status)}</p>
 				<p><strong>Presupuesto:</strong> $${project.budget}</p>
-				<p><strong>Postulantes:</strong> ${applicants.length}</p>
+				<p><strong>Postulantes:</strong> ${apps.length}</p>
 				${assignedFreelancer ? `<p><strong>Freelancer asignado:</strong> ${assignedFreelancer.name}</p>` : ''}
 				<button class="btn btn-outline mt-20" onclick="showProjectModal('${project.id}')">Editar</button>
 				<button class="btn btn-primary mt-20" onclick="viewProjectDetails('${project.id}')">Ver Detalles</button>
@@ -573,8 +570,7 @@ async function updateMyProjectsContent() {
 		`;
 	});
 	
-	projectsHTML += '</div>';
-	myProjectsContent.innerHTML = projectsHTML;
+	myProjectsContent.appendChild(projectsHTML)
 }
 
 // Project Functions
@@ -710,10 +706,8 @@ window.applyToProject = applyToProject
 async function viewProjectDetails(projectId) {
 	const project = await projectApi.getProjectById(projectId)
 	
-	const owner = users.find(u => u.id === project.ownerId);
-	const projectApplications = applications.filter(app => app.projectId === projectId);
-	const assignedFreelancer = project.assignedFreelancerId ? 
-		users.find(u => u.id === project.assignedFreelancerId) : null;
+	const owner = await userApi.getUserById(project.ownerId)
+	const assignedFreelancer = project.assignedFreelancerId ? project.assignedFreelancerId : null;
 	
 	let modalContent = `
 		<h2>${project.title}</h2>
@@ -726,13 +720,13 @@ async function viewProjectDetails(projectId) {
 	`;
 	
 	if (currentUser.id === project.ownerId) {
-		// Client view - show applicants
-		modalContent += `<h3>Postulantes (${projectApplications.length})</h3>`;
 		
-		if (projectApplications.length > 0) {
-			projectApplications.forEach(app => {
-				const freelancer = users.find(u => u.id === app.freelancerId);
-				if (!freelancer) return;
+		const projectApplicants = await applicantApi.getApplicantsByProjectId(projectId)
+		// Client view - show applicants
+		modalContent += `<h3>Postulantes (${projectApplicants.length})</h3>`;
+		
+		if (projectApplicants.length > 0) {
+			projectApplicants.forEach(freelancer => {
 				
 				modalContent += `
 					<div class="card mt-20">
@@ -741,8 +735,7 @@ async function viewProjectDetails(projectId) {
 						${freelancer.rating ? `<p><strong>Rating:</strong> ${freelancer.rating}/5</p>` : ''}
 						${freelancer.occupation ? `<p><strong>Ocupación:</strong> ${freelancer.occupation}</p>` : ''}
 						${freelancer.cv ? `<p><strong>CV:</strong> ${freelancer.cv}</p>` : ''}
-						<p><strong>Estado de postulación:</strong> ${formatApplicationStatus(app.status)}</p>
-						${app.status === ApplicationStatus.PENDING ? 
+						${project.status === ProjectStatus.OPEN ? 
 							`<button class="btn btn-primary mt-20" onclick="selectFreelancer('${project.id}', '${freelancer.id}')">Seleccionar</button>` : 
 							''
 						}
