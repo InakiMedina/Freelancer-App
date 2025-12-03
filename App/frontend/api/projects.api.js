@@ -1,3 +1,4 @@
+//api/projects.js
 export async function getProjects() {
 
 	return await fetch('http://localhost:3000/api/project')

@@ -1,6 +1,8 @@
+//services/projects.service.js
 import fs from "fs";
 import path from "path";
 import { ProjectSchema } from "../models/projects.schema.js";
+import * as authUtils from "../utils/auth.utils.js";
 
 import { fileURLToPath } from "url";
 import { dirname } from "path";
@@ -41,7 +43,10 @@ export const getProjectsByStatus = (status) => {
 
 export const createProject = (projectData) => {
 
+  projectData["id"] = authUtils.generateId()
+
   const result  = ProjectSchema.safeParse(projectData);  // validation
+
   if (!result.success) 
     return { 
         'success': 409,

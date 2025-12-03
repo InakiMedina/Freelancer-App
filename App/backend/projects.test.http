@@ -15,7 +15,6 @@ POST http://localhost:3000/api/project
 content-type: application/json
 
 {
-	"id": "_c5w7cuzec", 
 	"title": "Proyecto Final Web", 
 	"description": "ayudenme haciendo un proyecto de web para mi clase. JS, Node, Express y Mongo con opcional boostrap.", 
 	"budget": 6000, 
@@ -29,8 +28,7 @@ content-type: application/json
 POST http://localhost:3000/api/project
 content-type: application/json
 
-{
-	"id": "_kuskoisuwy", 
+{ 
 	"title": "App para contadores", 
 	"description": "necesito un app de Shiphone que me ayude a mantener cuenta de pagos que hago", 
 	"budget": 18000, 
@@ -53,6 +51,35 @@ content-type: application/json
 	"ownerId":"_bpw4vcdbt",
 	"status":"open",
 	"creationDate":"2025-11-29T22:39:33.199Z"
+}	
+	
+###
+POST http://localhost:3000/api/project
+content-type: application/json
+
+{
+	"title":"Practica de Github",
+	"description":"investigar que es jenkins y hacer un reporte de una pagina",
+	"budget":50,
+	"category":"writing",
+	"ownerId":"_y9ogn5t6w",
+	"status":"open",
+	"creationDate":"2025-12-02T12:39:33.199Z"
+}	
+	
+###
+POST http://localhost:3000/api/project
+content-type: application/json
+
+{
+	"id":"_61en2nr6a",
+	"title":"Snake Game",
+	"description":"un snake en el celular",
+	"budget":500,
+	"category":"mobile-developmen",
+	"ownerId":"_y9ogn5t6w",
+	"status":"open",
+	"creationDate":"2025-12-01T22:39:33.199Z"
 }	
 
 ###

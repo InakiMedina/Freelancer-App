@@ -1,6 +1,8 @@
 import fs from "fs";
 import path from "path";
 import { UsersSchema } from "../models/users.schema.js";
+import * as authUtils from "../utils/auth.utils.js";
+
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 
@@ -25,6 +27,8 @@ export const getUserByEmail = (email) => {
 };
 
 export const createUser = (userData) => {
+  userData["id"] = authUtils.generateId()
+  
   const result = UsersSchema.safeParse(userData);
   if (!result.success)
     return {

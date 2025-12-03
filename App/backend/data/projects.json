@@ -28,5 +28,25 @@
     "ownerId": "_bpw4vcdbt",
     "status": "open",
     "creationDate": "2025-11-29T22:39:33.199Z"
+  },
+  {
+    "id": "3cbe5ed1-f660-4348-9703-b2ff9e8c0ff6",
+    "title": "Practica de Github",
+    "description": "investigar que es jenkins y hacer un reporte de una pagina",
+    "budget": 50,
+    "category": "writing",
+    "ownerId": "_y9ogn5t6w",
+    "status": "open",
+    "creationDate": "2025-12-02T12:39:33.199Z"
+  },
+  {
+    "id": "1cb39ebb-f000-47e5-a1f2-ede228c97cf7",
+    "title": "Snake Game",
+    "description": "un snake en el celular",
+    "budget": 500,
+    "category": "mobile-developmen",
+    "ownerId": "_y9ogn5t6w",
+    "status": "open",
+    "creationDate": "2025-12-01T22:39:33.199Z"
   }
 ]

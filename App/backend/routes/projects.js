@@ -1,4 +1,4 @@
-// controllers/projects.js
+// routes/projects.js
 import express from "express";
 import * as service from "../services/projects.service.js";
 

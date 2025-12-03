@@ -48,10 +48,8 @@ export async function addUser(user) {
     body: JSON.stringify(user)
   })
   .then(async res => {
-	const json = await res.json()
-	console.log(json)
-	return json
-	});
+    res.ok
+	})
 }
 
 export async function updateUser(id, user) {

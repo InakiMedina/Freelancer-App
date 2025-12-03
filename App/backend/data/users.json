@@ -28,5 +28,35 @@
     "currentWork": "",
     "cv": "",
     "currentProjects": []
+  },
+  {
+    "id": "_ig11hcoez",
+    "name": "slave",
+    "email": "inaki.medinam@outlook.com",
+    "password": "slave",
+    "rating": 0,
+    "raitingCount": 0,
+    "type": "freelancer",
+    "registrationDate": "2025-12-02T21:49:44.328Z",
+    "educationLevel": "",
+    "occupation": "",
+    "currentWork": "",
+    "cv": "",
+    "currentProjects": []
+  },
+  {
+    "id": "_y9ogn5t6w",
+    "name": "buyer",
+    "email": "buyer@buy.com",
+    "password": "buyer",
+    "rating": 0,
+    "raitingCount": 0,
+    "type": "client",
+    "registrationDate": "2025-12-02T21:51:27.904Z",
+    "educationLevel": "",
+    "occupation": "",
+    "currentWork": "",
+    "cv": "",
+    "currentProjects": []
   }
 ]

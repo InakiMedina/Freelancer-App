@@ -1,5 +1,6 @@
 import * as projectApi from '../api/projects.api.js'
 import * as userApi from '../api/users.api.js'
+import * as applicantApi from '../api/applicants.api.js'
 
 // Data Models
 const cache = {}
@@ -269,7 +270,6 @@ async function handleAuth(e) {
 		
 		// Create new user
 		const newUser = {
-			id: generateId(),
 			name,
 			email,
 			password,
@@ -285,7 +285,12 @@ async function handleAuth(e) {
 		};
 	
 		currentUser = newUser;
-		await userApi.addUser(newUser)
+		const signupRes = await userApi.addUser(newUser)
+		if (!signupRes) {
+			e.stopImmediatePropagation()
+			alert("Server failed to add user");
+			return
+		}
 		localStorage.setItem('currentUser', JSON.stringify(currentUser));
 		
 		updateNavigation();
@@ -504,37 +509,37 @@ async function updateProjectsContent() {
 	projectsContent.innerHTML = projectsHTML;
 }
 
-function updateMyApplicationsContent() {
+async function updateMyApplicationsContent() {
 	const myApplicationsContent = document.getElementById('my-applications-content');
+	myApplicationsContent.innerHTML = ""
 	
-	const myApplications = applications.filter(app => 
-		app.freelancerId === currentUser.id
-	);
+	const projectsApliedTo = await applicantApi.getProjectsByApplicantId(currentUser.id)
 	
-	if (myApplications.length === 0) {
+	if (projectsApliedTo.length === 0) {
 		myApplicationsContent.innerHTML = '<p>No te has postulado a ningún proyecto aún.</p>';
 		return;
 	}
 	
-	let applicationsHTML = '<div class="project-grid">';
+	let applicationsHTML = document.createElement('div')
+	applicationsHTML.classList.add('project-grid')
+
 	
-	myApplications.forEach(app => {
-		const project = projects.find(p => p.id === app.projectId);
-		if (!project) return;
+	projectsApliedTo.forEach(async app => {
+		const project = await projectApi.getProjectById(app.projectId)
+		if (project == undefined) return;
 		
-		applicationsHTML += `
-			<div class="project-card">
+		const tmp = `<div class="project-card">
 				<h3 class="card-title">${project.title}</h3>
 				<p>${project.description.substring(0, 100)}...</p>
 				<p><strong>Estado:</strong> ${formatApplicationStatus(app.status)}</p>
 				<p><strong>Presupuesto:</strong> $${project.budget}</p>
 				<button class="btn btn-outline mt-20" onclick="viewProjectDetails('${project.id}')">Ver Detalles</button>
-			</div>
-		`;
+			</div>`
+		
+		applicationsHTML.innerHTML += tmp
 	});
 	
-	applicationsHTML += '</div>';
-	myApplicationsContent.innerHTML = applicationsHTML;
+	myApplicationsContent.appendChild(applicationsHTML)
 }
 
 async function updateMyProjectsContent() {
@@ -658,7 +663,6 @@ async function handleProjectSubmit(e) {
 	} else {
 		// Create new project
 		const newProject = {
-			id: generateId(),
 			title,
 			description,
 			budget: parseInt(budget),
@@ -676,32 +680,26 @@ async function handleProjectSubmit(e) {
 	projectModal.classList.add('hidden');
 }
 
-function applyToProject(projectId) {
+async function applyToProject(projectId) {
 	if (currentUser.type === UserTypes.CLIENT) {
 		showAlert('Solo los freelancers pueden postularse a proyectos.', 'danger');
 		return;
 	}
-	
+
 	// Check if already applied
-	const existingApplication = applications.find(app => 
-		app.projectId === projectId && app.freelancerId === currentUser.id
-	);
 	
-	if (existingApplication) {
+	if (await applicantApi.doesApplicationExisist(projectId)) {
 		showAlert('Ya te has postulado a este proyecto.', 'warning');
 		return;
 	}
 	
 	// Create application
 	const newApplication = {
-		id: generateId(),
 		projectId,
 		freelancerId: currentUser.id,
-		status: ApplicationStatus.PENDING,
-		applicationDate: new Date().toISOString()
 	};
 	
-	applications.push(newApplication);
+	await applicantApi.createApplication(newApplication);
 	localStorage.setItem('applications', JSON.stringify(applications));
 	
 	showAlert('Te has postulado al proyecto exitosamente.', 'success');
@@ -823,11 +821,6 @@ function completeProject(projectId) {
 		projectModal.classList.add('hidden');
 		updateOverviewContent();
 	}
-}
-
-// Utility Functions
-function generateId() {
-	return '_' + Math.random().toString(36).substr(2, 9);
 }
 
 function showAlert(message, type) {
