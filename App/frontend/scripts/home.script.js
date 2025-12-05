@@ -91,7 +91,6 @@ function customConfirm(message) {
 
 // Initialize App
 function initApp() {
-	updateNavigation();
 	
 	if (currentUser) {
 		showDashboard();
@@ -149,7 +148,6 @@ function showDashboard() {
 function logout() {
 	currentUser = null;
 	localStorage.removeItem('currentUser');
-	updateNavigation();
 	showLandingPage();
 }
 

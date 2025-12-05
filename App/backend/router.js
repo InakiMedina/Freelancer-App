@@ -11,6 +11,13 @@ import { dirname } from "path";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+// dotenv.config();
+
+
+// // Servir archivos subidos (imagenes, portafolios)
+// app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+
 const router = express.Router()
 
 router.use('/api', apiRouter)

@@ -134,9 +134,6 @@ async function handleAuth(e) {
 			return
 		}
 		localStorage.setItem('currentUser', JSON.stringify(currentUser));
-		
-		updateNavigation();
-		showDashboard();
 	}
 }
 
