@@ -124,6 +124,7 @@ function setupEventListeners() {
 function showLandingPage() {
 	landingPage.classList.remove('hidden');
 	dashboardSection.classList.add('hidden');
+	updateDashboard()
 }
 
 function showProjectsPage() {
@@ -138,6 +139,7 @@ function showDashboard() {
 	updateDashboard();
 	showDashboardSection('overview');
 }
+window.showDashboard = showDashboard
 
 async function logout() {
 	currentUser = null;
@@ -164,6 +166,7 @@ function updateDashboard() {
 	else 
 		freelancerOnly.forEach(f =>f.classList.add('hidden'));
 	
+	console.log(currentUser.type)
 
 	if (currentUser.type === UserTypes.CLIENT) 
 		clientOnly.classList.remove('hidden');
@@ -377,7 +380,7 @@ async function updateMyApplicationsContent() {
 	projectsApliedTo.forEach(async project => {
 		if (project.status == "completed" && project.freelancerId != currentUser.id)
 			return
-		
+
 		const tmp = `<div class="project-card">
 				<h3 class="card-title">${project.title}</h3>
 				<p>${project.description.substring(0, 100)}...</p>
@@ -444,7 +447,7 @@ async function updateMyProjectsContent() {
 					<div class="project-card">
 						<h3 class="card-title">${project.title}</h3>
 						<p>${project.description.substring(0, 100)}...</p>
-						<p><strong>Este proyecto esta</strong>terminado</p>
+						<p><strong>Este proyecto esta</strong> terminado</p>
 						<p><strong>Presupuesto:</strong> $${project.budget}</p>
 						<p><strong>Postulantes:</strong> ${apps.length}</p>
 						<p><strong>Freelancer asignado:</strong> ${assignedFreelancer.name}</p>
@@ -472,12 +475,12 @@ async function showProjectModal(projectId = null) {
 		projectModal.classList.add('hidden');
 	});
 
-	projectModalTitle.textContent = isEdit ? 'Editar Proyecto' : 'Crear Proyecto';
+	// projectModalTitle.textContent = isEdit ? 'Editar Proyecto' : 'Crear Proyecto';
 	projectSubmitBtn.textContent = isEdit ? 'Actualizar' : 'Crear';
 	projectApplicantsGroup.style.display = 'none';
 	
 	if (isEdit) {
-		
+		projectModalTitle.classList.remove('hidden')
 		projectDeleteBtn.classList.remove('hidden')	
 		projectDeleteBtn.addEventListener('click', () => confirmProjectDeletion(projectId))
 
@@ -491,6 +494,7 @@ async function showProjectModal(projectId = null) {
 			document.getElementById('project-category').value = project.category;
 		}
 	} else {
+		projectModalTitle.classList.add('hidden')
 		projectDeleteBtn.classList.add('hidden')
 		projectForm.reset();
 	}
@@ -525,7 +529,7 @@ async function handleProjectSubmit(e) {
 	const budget = document.getElementById('project-budget').value;
 	const category = document.getElementById('project-category').value;
 	
-	const isEdit = projectModalTitle.textContent === 'Editar Proyecto';
+	const isEdit = projectModalTitle.classList.contains('hidden')
 
 	if (isEdit) {
 		const projectId = projectModal.dataset.projectId;
@@ -596,15 +600,35 @@ async function viewProjectDetails(projectId) {
 	const assignedFreelancerId = project.assignedFreelancerId ? project.assignedFreelancerId : null;
 	const owner = await userApi.getUserById(project.ownerId)
 
+	// let modalContent = `
+	// 	<h2>${project.title}</h2>
+	// 	<p><strong>Descripción:</strong> ${project.description}</p>
+	// 	<p><strong>Presupuesto:</strong> $${project.budget}</p>
+	// 	<p><strong>Categoría:</strong> ${formatCategory(project.category)}</p>
+	// 	<p><strong>Estado:</strong> ${formatProjectStatus(project.status)}</p>
+	// 	<p><strong>Publicado por:</strong> ${owner ? owner.name : 'Desconocido'}</p>
+	// 	<p><strong>Fecha de publicación:</strong> ${new Date(project.creationDate).toLocaleDateString()}</p>
+	// `;
 	let modalContent = `
-		<h2>${project.title}</h2>
-		<p><strong>Descripción:</strong> ${project.description}</p>
-		<p><strong>Presupuesto:</strong> $${project.budget}</p>
-		<p><strong>Categoría:</strong> ${formatCategory(project.category)}</p>
-		<p><strong>Estado:</strong> ${formatProjectStatus(project.status)}</p>
-		<p><strong>Publicado por:</strong> ${owner ? owner.name : 'Desconocido'}</p>
-		<p><strong>Fecha de publicación:</strong> ${new Date(project.creationDate).toLocaleDateString()}</p>
-	`;
+	<h3 class="section-title">Información General</h3>
+        <div class="info-grid mb-4">
+            <div class="info-item">
+                <span class="info-label">Presupuesto:</span>
+                <span class="info-value budget-value">$${project.budget}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Categoría:</span>
+                <span class="info-value">${formatCategory(project.category)}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Publicado por:</span>
+                <span class="info-value">${owner ? owner.name : 'Desconocido'}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Fecha de publicación:</span>
+                <span class="info-value">${new Date(project.creationDate).toLocaleDateString()}</span>
+            </div>
+        </div>`
 
 	// Case 1 & 2 & 3: Project Owner (Client) View
 
@@ -614,36 +638,64 @@ async function viewProjectDetails(projectId) {
             const assignedFreelancer = await userApi.getUserById(assignedFreelancerId);
 
             modalContent += `
-                <div class="card mt-20">
-					<h3>Proyecto Terminado</h3>
-                    <p>Freelancer Asignado: <b>${assignedFreelancer.name}</b></p>
-                </div>
+					<div class="completion-status-section status-finished">
+						<h3 class="section-title">Finalización del Proyecto</h3>
+						<div class="completion-message">
+							<p class="message-text">
+								¡Este proyecto ha sido marcado como <b>Terminado</b>!
+							</p>
+							<p class="freelancer-info">
+								Freelancer Asignado: <span class="assigned-name">${assignedFreelancer.name}</span>
+							</p>
+						</div>
+					</div>
+              
             `;
 		} else
         if (!assignedFreelancerId) {
             // CASE 2: Client owns project, NO freelancer assigned (show applicants)
             const projectApplicants = await applicantApi.getApplicantsByProjectId(projectId);
             
-            modalContent += `<h3>Postulantes (${projectApplicants.length})</h3>`;
+            modalContent += `<div class="applicants-list-header">
+				<h3 class="applicants-title">Postulantes</h3>
+				<span class="applicants-count">${projectApplicants.length}</span>
+			</div>`;
             
             if (projectApplicants.length > 0) {
                 projectApplicants.forEach(freelancer => {
                     modalContent += `
-                        <div class="card mt-20">
-                            <h4>${freelancer.name}</h4>
-                            <p><strong>Email:</strong> ${freelancer.email}</p>
-                            ${freelancer.rating ? `<p><strong>Rating:</strong> ${freelancer.rating}/5</p>` : ''}
-                            ${freelancer.occupation ? `<p><strong>Ocupación:</strong> ${freelancer.occupation}</p>` : ''}
-                            ${freelancer.cv ? `<p><strong>CV:</strong> ${freelancer.cv}</p>` : ''}
-                            ${project.status === ProjectStatus.OPEN ? 
-                                `<button class="btn btn-primary mt-20" onclick="selectFreelancer('${project.id}', '${freelancer.id}')">Seleccionar</button>` : 
-                                ''
-                            }
-                        </div>
+                        <div class="applicant-card">
+							<div class="applicant-header">
+								<h4 class="applicant-name">${freelancer.name}</h4>
+								${freelancer.rating ? `<span class="applicant-rating"><i class="fas fa-star"></i> ${freelancer.rating}/5</span>` : ''}
+							</div>
+							<div class="applicant-details">
+								<div class="detail-item">
+									<span class="detail-label">Email:</span>
+									<span class="detail-value">${freelancer.email}</span>
+								</div>
+								${freelancer.occupation ? `
+									<div class="detail-item">
+										<span class="detail-label">Ocupación:</span>
+										<span class="detail-value">${freelancer.occupation}</span>
+									</div>` : ''}
+								${freelancer.cv ? `
+									<div class="detail-item">
+										<span class="detail-label">CV:</span>
+										<span class="detail-value cv-link">${freelancer.cv}</span>
+									</div>` : ''}
+							</div>
+							${project.status === ProjectStatus.OPEN ? 
+								`<button class="btn btn-primary select-btn" onclick="selectFreelancer('${project.id}', '${freelancer.id}')">Seleccionar</button>` : 
+								''
+							}
+						</div>
                     `;
                 });
             } else {
-                modalContent += '<p>No hay postulantes para este proyecto.</p>';
+                modalContent += `<div class="applicants-list-header">
+				<h3 class="applicants-title">No hay postulantes</h3>
+			</div>`;
             }
             
         } else {
@@ -654,7 +706,7 @@ async function viewProjectDetails(projectId) {
                 <div class="card mt-20">
                     <h3>Freelancer Asignado: <b>${assignedFreelancer.name}</b></h3>
                     <p><strong>Email:</strong> ${assignedFreelancer.email}</p>
-                    <p>Por favor, **póngase en contacto con el freelancer** para coordinar los detalles del proyecto.</p>
+                    <p>Por favor, <b>póngase en contacto con el freelancer</b> para coordinar los detalles del proyecto.</p>
                     ${project.status === ProjectStatus.IN_PROGRESS ? 
                         `<button class="btn btn-primary mt-20" onclick="completeProject('${project.id}')">Marcar como Completado</button>` : 
                         ''
@@ -681,7 +733,8 @@ async function viewProjectDetails(projectId) {
 				// CASE 5: Freelancer NOT assigned, not applied user is NOT owner (hide applicants, show neutral message)
 				modalContent += `
 					<div class="card mt-20">
-						<p>El proyecto está abierto y a la espera de un freelancer.</p>
+						<h3> Freelancer no escojido </h3>
+						<p>El proyecto está abierto y a la espera de que se escoja un freelancer.</p>
 						<p>El listado de postulantes es privado y visible solo para el dueño del proyecto.</p>
 					</div>
 				`;
@@ -708,7 +761,7 @@ async function viewProjectDetails(projectId) {
                 // CASE 4a: YOU are the assigned freelancer
                 modalContent += `
                     <h3>¡Felicidades! Has sido seleccionado.</h3>
-                    <p>Por favor, **ponte en contacto con el cliente** (${owner.name}, email: ${owner.email}) para iniciar el proyecto.</p>
+                    <p>Por favor, <b>ponte en contacto con el cliente</b> (${owner.name}, email: ${owner.email}) para iniciar el proyecto.</p>
                 `;
             } else {
                 // CASE 4b: Another freelancer was chosen
@@ -763,8 +816,6 @@ async function viewProjectDetails(projectId) {
 	// 	`;
 	// }
 	
-	// Show modal with project details
-	projectModalTitle.textContent = 'Detalles del Proyecto';
 	// cache.formData = projectForm.innerHTML
 	showInfoModalForm.innerHTML = modalContent;
 	projectSubmitBtn.style.display = 'none';

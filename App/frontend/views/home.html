@@ -19,7 +19,7 @@
                     </div>
                     <ul class="nav-links">
                         <li><a href="#" id="nav-home">Inicio</a></li>
-                        <li><a href="#" id="nav-projects">Proyectos</a></li>
+                        <li class="freelancer-only"><a href="#" id="nav-projects" >Proyectos</a></li>
                         <li><a href="#" id="nav-dashboard">Dashboard</a></li>
                         <li><a href="#" id="nav-logout">Cerrar Sesión</a></li>
                     </ul>
@@ -33,7 +33,7 @@
                 <div class="container">
                     <h1>Conecta con los mejores freelancers</h1>
                     <p>Encuentra talento para tus proyectos o consigue trabajo como freelancer en nuestra plataforma</p>
-                    <button class="btn btn-primary" id="get-started-btn">Comenzar Ahora</button>
+                    <button class="btn btn-primary" id="get-started-btn" onclick="showDashboard()">Comenzar Ahora</button>
                 </div>
             </div>
             
@@ -121,7 +121,7 @@
         <!-- Project Modal -->
         <div id="project-modal" class="modal hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 1000;">
             <div class="card" style="width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto;">
-                <h2 id="project-modal-title">Crear Proyecto</h2>
+                <h2 id="project-modal-title" class="hidden">Crear Proyecto</h2>
                 <button class="x-close-btn" onclick="closeModal('project-modal')">
                     &times;
                 </button>
