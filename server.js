@@ -4,8 +4,8 @@ const app = express()
 import path from 'path'
 import cookieParse from "cookie-parser"
 
-const port = process.env.PORT || 8080
-const host = process.env.HOST || 'localhost'
+const port = process.env.PORT || 3000
+const host = process.env.HOST || 'http://localhost'
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 
@@ -15,11 +15,12 @@ const __dirname = dirname(__filename);
 import router from './App/backend/router.js'
 
 // make easy for the html files to call the css/js/images
-app.use(cors({
-  origin: `https://${host}:80`, 
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true,
-}));
+// app.use(cors({
+//   origin: `${host}:${port}`, 
+//   methods: ['GET', 'POST', 'PUT', 'DELETE'],
+//   credentials: true,
+// }));
+app.use(cors())
 
 app.use(express.json())
 app.use(cookieParse())
