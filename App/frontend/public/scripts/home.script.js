@@ -1,7 +1,7 @@
-import * as projectApi from '../api/projects.api.js'
-import * as userApi from '../api/users.api.js'
-import * as applicantApi from '../api/applicants.api.js'
-import * as authApi from '../api/auth.api.js'
+import * as projectApi from '../../api/projects.api.js'
+import * as userApi from '../../api/users.api.js'
+import * as applicantApi from '../../api/applicants.api.js'
+import * as authApi from '../../api/auth.api.js'
 
 // Data Models
 
@@ -369,7 +369,7 @@ async function updateMyApplicationsContent() {
 	myApplicationsContent.innerHTML = ""
 	
 	const projectsApliedTo = await applicantApi.getProjectsByApplicantId(currentUser.id)
-	
+	console.log(projectsApliedTo)
 	if (projectsApliedTo.length === 0) {
 		myApplicationsContent.innerHTML = '<p>No te has postulado a ningún proyecto aún.</p>';
 		return;

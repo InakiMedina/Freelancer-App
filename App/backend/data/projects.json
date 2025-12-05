@@ -36,8 +36,9 @@
     "budget": 50,
     "category": "writing",
     "ownerId": "_y9ogn5t6w",
-    "status": "open",
-    "creationDate": "2025-12-02T12:39:33.199Z"
+    "status": "in_progress",
+    "creationDate": "2025-12-02T12:39:33.199Z",
+    "assignedFreelancerId": "_ig11hcoez"
   },
   {
     "id": "ff50c4c1-4daa-4177-98e1-c043d569097d",

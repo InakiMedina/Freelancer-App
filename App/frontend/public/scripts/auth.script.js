@@ -1,4 +1,4 @@
-import * as authApi from '../api/auth.api.js'
+import * as authApi from '../../api/auth.api.js'
 
 // Current User
 let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;

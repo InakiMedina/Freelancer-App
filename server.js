@@ -22,7 +22,7 @@ app.use(cors({
 
 app.use(express.json())
 app.use(cookieParse())
-app.use(express.static(path.join(__dirname, "app", "frontend")));
+app.use(express.static(path.join(__dirname, "app", "frontend", "public")));
 app.use(router)
 
 app.listen(port, () => {
