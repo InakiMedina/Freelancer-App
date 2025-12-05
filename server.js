@@ -1,13 +1,16 @@
 import express from 'express'
 import mongoose from "mongoose";
 import cors from 'cors'
-import path from 'path'
 import cookieParse from "cookie-parser"
 import dotenv from "dotenv";
 
-// server.js (versión unificada ESM)
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
+
+import authRoutes from "./routes/authRoutes.js";
+import projectRoutes from "./routes/projectRoutes.js";
+import uploadRoutes from "./routes/uploadRoutes.js";
+import router from "./App/backend/router.js"; // tu router principal
 
 dotenv.config();
 
@@ -17,8 +20,6 @@ const port = process.env.PORT || 3000;
 // Necesario para obtener __dirname con ESM
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-
-import router from './App/backend/router.js'
 
 // make easy for the html files to call the css/js/images
 app.use(cors());
@@ -39,12 +40,6 @@ mongoose
   .connect(process.env.MONGODB_URI || "mongodb://localhost:27017/freelancer")
   .then(() => console.log("MongoDB conectado"))
   .catch((err) => console.error("Error MongoDB:", err));
-
-// RUTAS BACKEND
-import authRoutes from "./routes/authRoutes.js";
-import projectRoutes from "./routes/projectRoutes.js";
-import uploadRoutes from "./routes/uploadRoutes.js";
-import router from "./App/backend/router.js"; // tu router principal
 
 app.use("/api/auth", authRoutes);
 app.use("/api/projects", projectRoutes);
