@@ -1,7 +1,7 @@
 [
   {
     "id": "_bpw4vcdbt",
-    "name": "inaki freelancer",
+    "name": "cliente",
     "email": "inaki.medina@gmail.com",
     "password": "clint",
     "rating": 0,
@@ -53,6 +53,31 @@
     "raitingCount": 0,
     "type": "client",
     "registrationDate": "2025-12-02T21:51:27.904Z",
+    "educationLevel": "",
+    "occupation": "",
+    "currentWork": "",
+    "cv": "",
+    "currentProjects": []
+  },
+  {
+    "id": "cf8bccf2-ea61-4b56-bb7f-b8656872f5f4",
+    "name": "coder",
+    "email": "coder@coding.com",
+    "hashedPassword": "$2b$10$mQPQRJIFiY5B125NNkNhku//yqxD0wZCmtsQkB0FnPi/56v47v/E6",
+    "raitingCount": 0,
+    "type": "freelancer",
+    "registrationDate": "2025-12-01T01:59:35.078Z",
+    "currentProjects": []
+  },
+  {
+    "id": "d5720388-cef0-4b83-a7e3-6b29bcdc4162",
+    "name": "vibe",
+    "email": "vibe@coder.ai",
+    "hashedPassword": "$2b$10$8tdq0zBBayA3HOJX183srOsRGIQNLwn/3RxjeMjGnxN1IfBiWAcaK",
+    "rating": 0,
+    "raitingCount": 0,
+    "type": "freelancer",
+    "registrationDate": "2025-12-05T00:47:36.544Z",
     "educationLevel": "",
     "occupation": "",
     "currentWork": "",

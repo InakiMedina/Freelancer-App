@@ -44,8 +44,7 @@ export const createUser = (userData) => {
   writeFile(data);
 
   return {
-    success: 201,
-    body: result.data
+    success: 201
   };
 };
 

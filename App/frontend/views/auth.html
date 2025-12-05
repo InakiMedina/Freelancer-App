@@ -1,0 +1,69 @@
+<html>
+	<head>
+	
+        <title>FreelanceHub - Login / Signup</title>
+        <link rel="stylesheet" href="/styles/auth.css">
+        <script type="module" src="/scripts/auth.script.js" defer></script>
+
+	</head>
+
+	<body>
+	
+            <div class="container">
+                <nav class="navbar">
+                    <div class="logo">
+                        <img src="/images/spear.png" height="50px">
+                        <div style="margin-top: 7px">FreelanceHub</div>
+                    </div>
+                    <ul class="nav-links">
+                        <li><a href="#" id="nav-login" class="hidden">Iniciar Sesión</a></li>
+                        <li><a href="#" id="nav-register" class="hidden">Registrarse</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Authentication Pages -->
+        
+        <section id="auth-section">
+            <div class="section">
+                <div class="container">
+                    <div class="card" style="max-width: 500px; margin: 0 auto;">
+                    
+                        <div id="auth-alert" class="alert hidden"></div>
+                        <h2 class="text-center" id="auth-title">Iniciar Sesión</h2>
+                        <form id="auth-form">
+                            <div class="form-group" id="name-group" style="display: none;">
+                                <label class="form-label" for="name">Nombre completo</label>
+                                <input type="text" class="form-control" id="name">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="email">Correo electrónico</label>
+                                <input type="email" class="form-control" id="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="password">Contraseña</label>
+                                <input type="password" class="form-control" id="password" required>
+                            </div>
+                            <div class="form-group" id="user-type-group" style="display: none;">
+                                <label class="form-label" for="user-type">Tipo de usuario</label>
+                                <select class="form-select" id="user-type">
+                                    <option value="freelancer">Freelancer</option>
+                                    <option value="client">Cliente</option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="cv-group" style="display: none;">
+                                <label class="form-label" for="cv">CV (PDF)</label>
+                                <input type="file" class="form-control" id="cv" accept=".pdf">
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="width: 100%;" id="auth-submit-btn">Iniciar Sesión</button>
+                        </form>
+                        <p class="text-center mt-20" id="auth-switch-text">
+                            ¿No tienes una cuenta? <a href="#" id="auth-switch-link">Regístrate</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+	</body>
+</html>

@@ -1,0 +1,22 @@
+###
+POST http://localhost:3000/login
+content-type: application/json
+
+{
+	"name": "cliente",
+    "email": "inaki.medina@gmail.com",
+    "password": "clint"
+}
+
+###
+POST http://localhost:3000/signup
+content-type: application/json
+
+{
+	"name": "coder",
+    "email": "coder@coding.com",
+    "password": "coder",
+    "raitingCount": 0,
+    "type": "freelancer",
+    "registrationDate": "2025-12-01T01:59:35.078Z"
+}

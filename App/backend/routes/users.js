@@ -1,5 +1,5 @@
-  // controllers/users.js
-  import express from "express";
+  // routes/users.js
+import express from "express";
   import * as service from "../services/users.service.js";
 
   const router = express.Router();
@@ -15,7 +15,7 @@
   router.get("/email/:email", (req, res) => {
     const user = service.getUserByEmail(req.params.email);
     if (!user) return res.status(404).json({ error: "User not found" });
-    res.json(user);
+    res.json(user)
   });
 
   router.post("/login", (req, res) => {

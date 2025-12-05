@@ -1,0 +1,85 @@
+###
+GET http://localhost:3000/api/project
+
+###
+GET http://localhost:3000/api/project/_c5w7cuzec
+###
+GET http://localhost:3000/api/project?ownerId=_6h47qvz6t
+
+###
+GET http://localhost:3000/api/project?status=open
+
+###
+POST http://localhost:3000/api/project
+content-type: application/json
+
+{
+	"title": "Proyecto Final Web", 
+	"description": "ayudenme haciendo un proyecto de web para mi clase. JS, Node, Express y Mongo con opcional boostrap.", 
+	"budget": 6000, 
+	"category": "web-development", 
+	"ownerId": "_bpw4vcdbt", 
+	"status": "open", 
+	"creationDate": "2025-11-29T21:27:26.114Z"
+}
+
+###
+POST http://localhost:3000/api/project
+content-type: application/json
+
+{ 
+	"title": "App para contadores", 
+	"description": "necesito un app de Shiphone que me ayude a mantener cuenta de pagos que hago", 
+	"budget": 18000, 
+	"category": "mobile-development", 
+	"ownerId": "_bpw4vcdbt", 
+	"status": "open", 
+	"creationDate": "2025-11-29T22:37:26.114Z"
+}
+	
+###
+POST http://localhost:3000/api/project
+content-type: application/json
+
+{
+	"id":"_61en2nr6a",
+	"title":"Reporte de Inovacion",
+	"description":"reporte de 3 paginas de una inovacion con entrevistas, evolucion, demos, y market research",
+	"budget":5000,
+	"category":"writing",
+	"ownerId":"_bpw4vcdbt",
+	"status":"open",
+	"creationDate":"2025-11-29T22:39:33.199Z"
+}	
+	
+###
+POST http://localhost:3000/api/project
+content-type: application/json
+
+{
+	"title":"Practica de Github",
+	"description":"investigar que es jenkins y hacer un reporte de una pagina",
+	"budget":50,
+	"category":"writing",
+	"ownerId":"_y9ogn5t6w",
+	"status":"open",
+	"creationDate":"2025-12-02T12:39:33.199Z"
+}	
+	
+###
+POST http://localhost:3000/api/project
+content-type: application/json
+
+{
+	"id":"_61en2nr6a",
+	"title":"Snake Game",
+	"description":"un snake en el celular",
+	"budget":500,
+	"category":"mobile-developmen",
+	"ownerId":"_y9ogn5t6w",
+	"status":"open",
+	"creationDate":"2025-12-01T22:39:33.199Z"
+}	
+
+###
+DELETE http://localhost:3000/api/project/_c5w7cuzec

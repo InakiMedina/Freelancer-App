@@ -127,7 +127,7 @@ export const getApplicantsByProjectId = (projectId) => {
  */
 export const createApplication = (applicationData) => {
     if (!applicationData.status)
-        applicationData.status = 'accepted'
+        applicationData.status = 'pending'
     
     const result = AplicantsSchema.safeParse(applicationData); // validation
     if (!result.success) {
@@ -214,23 +214,24 @@ export const deleteAllApplications = () => {
  * @param {string} projectId The ID of the project.
  */
 export const acceptApplicant = (projectId, freelancerId) => {
-    const data = readFile();
-    const index = data.findIndex(app =>
-        (app.projectId === projectId && app.freelancerId === freelancerId)
-    )
-
-    if (index == -1)
+    let applicants = getApplicationsByProjectId(projectId)
+    console.log(applicants)
+    if (applicants.findIndex( app => app.freelancerId == freelancerId) == -1)
         return {
         'success': 404,
         'error': 'application not found'
     }
 
-    data.forEach((app, i) => {
-        if(i == index)
-            app.status = "accepted"
-        else
-            app.status = "declined"
+    const data = readFile();
+
+    data = data.map(app => {
+        if ( app.projectId == projectId)
+            app.status = app.freelancerId == freelancerId ? "accepted" : "declined"
+        return app
     })
+    console.log(data)
+
+    writeFile(data);
 
     return {
         'success': 202,

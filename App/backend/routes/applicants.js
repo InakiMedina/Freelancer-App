@@ -41,7 +41,7 @@ router.get("/freelancers/:id", (req, res) => {
 })
 
 router.get("/:projectId/:freelancerId", (req, res) => {
-    return res.json(service.getStatusOfApplication(req.params.id))
+    return res.json(service.getStatusOfApplication(req.params.projectId, req.params.freelancerId))
 })
 
 /**
@@ -101,7 +101,7 @@ router.delete("/:projectId/:freelancerId", (req, res) => {
 router.put("/:projectId/:freelancerId", (req, res) => {
     const { projectId, freelancerId } = req.params;
     const msg = service.acceptApplicant(projectId, freelancerId);
-    res.status(msg.status).send();
+    res.status(msg.success).send();
 });
 
 export const applicantsRouter = router;
