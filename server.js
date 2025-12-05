@@ -28,5 +28,5 @@ app.use(express.static(path.join(__dirname, "app", "frontend", "public")));
 app.use(router)
 
 app.listen(port, () => {
-  console.log(`Freelancer app runing on: http://${host}:${port}`)
+  console.log(`Freelancer app runing on: ${host}:${port}`)
 })

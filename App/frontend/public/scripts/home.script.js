@@ -91,14 +91,8 @@ function customConfirm(message) {
 
 // Initialize App
 function initApp() {
-	
-	if (currentUser) {
-		showDashboard();
-	} else {
-		showLandingPage();
-	}
-	
 	setupEventListeners();
+	showLandingPage();
 }
 
 // Event Listeners
