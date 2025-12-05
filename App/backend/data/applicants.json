@@ -48,5 +48,10 @@
     "projectId": "ff50c4c1-4daa-4177-98e1-c043d569097d",
     "freelancerId": "_ig11hcoez",
     "status": "declined"
+  },
+  {
+    "projectId": "55e952bf-9bb9-4ac8-849e-175b2a07e9d6",
+    "freelancerId": "d5720388-cef0-4b83-a7e3-6b29bcdc4162",
+    "status": "pending"
   }
 ]
