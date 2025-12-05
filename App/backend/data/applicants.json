@@ -12,7 +12,7 @@
   {
     "projectId": "08e25129-1380-4ac4-91a5-3258cf4b2e87",
     "freelancerId": "_j92psyqo7",
-    "status": "pending"
+    "status": "declined"
   },
   {
     "projectId": "fbc841eb-364d-4448-90b6-d5ddc3559576",
@@ -22,12 +22,12 @@
   {
     "projectId": "ff50c4c1-4daa-4177-98e1-c043d569097d",
     "freelancerId": "d5720388-cef0-4b83-a7e3-6b29bcdc4162",
-    "status": "pending"
+    "status": "accepted"
   },
   {
     "projectId": "08e25129-1380-4ac4-91a5-3258cf4b2e87",
     "freelancerId": "d5720388-cef0-4b83-a7e3-6b29bcdc4162",
-    "status": "pending"
+    "status": "accepted"
   },
   {
     "projectId": "6b9da6ad-3463-49b7-9d40-fe05fb166fa9",
@@ -47,6 +47,6 @@
   {
     "projectId": "ff50c4c1-4daa-4177-98e1-c043d569097d",
     "freelancerId": "_ig11hcoez",
-    "status": "pending"
+    "status": "declined"
   }
 ]

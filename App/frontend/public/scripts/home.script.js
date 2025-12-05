@@ -1,7 +1,7 @@
-import * as projectApi from '../../api/projects.api.js'
-import * as userApi from '../../api/users.api.js'
-import * as applicantApi from '../../api/applicants.api.js'
-import * as authApi from '../../api/auth.api.js'
+import * as projectApi from '../api/projects.api.js'
+import * as userApi from '../api/users.api.js'
+import * as applicantApi from '../api/applicants.api.js'
+import * as authApi from '../api/auth.api.js'
 
 // Data Models
 
@@ -217,18 +217,17 @@ async function updateOverviewContent() {
 	const overviewContent = document.getElementById('overview-content');
 	
 	if (currentUser.type === UserTypes.FREELANCER) {
-		const myApplications = applications.filter(app => 
-			app.freelancerId === currentUser.id
-		);
 		
 		const activeProjects = await projectApi.getOpenProjectsByFree(currentUser.id)
-		
+		const pendingApplications = await applicantApi.getPendingApplicationsApplicantId(currentUser.id)
+		const completed = await projectApi.getDoneProjectsByFree(currentUser.id)
+
 		overviewContent.innerHTML = `
 			<div class="card">
 				<h3 class="card-title">Resumen de Actividad</h3>
-				<p><strong>Postulaciones activas:</strong> ${myApplications.filter(app => app.status === ApplicationStatus.PENDING).length}</p>
+				<p><strong>Postulaciones activas:</strong> ${pendingApplications.length}</p>
 				<p><strong>Proyectos en curso:</strong> ${activeProjects.length}</p>
-				<p><strong>Proyectos completados:</strong> ${await projectApi.getDoneProjectsByFree(currentUser.id).length}</p>
+				<p><strong>Proyectos completados:</strong> ${completed.length}</p>
 				<p><strong>Rating promedio:</strong> ${currentUser.rating || 'Sin calificaciones'}</p>
 			</div>
 			<div class="card">
@@ -239,12 +238,14 @@ async function updateOverviewContent() {
 		`;
 	} else {
 		const myProjects = await projectApi.getProjectsByOwnerId(currentUser.id)
+		const completed = await projectApi.getDoneProjectsByFree(currentUser.id)
+		const in_progress = await projectApi.getInProgressProjectsByFree(currentUser.id)
 		overviewContent.innerHTML = `
 			<div class="card">
 				<h3 class="card-title">Resumen de Actividad</h3>
 				<p><strong>Proyectos publicados:</strong> ${myProjects.length}</p>
-				<p><strong>Proyectos en curso:</strong> ${myProjects.filter(p => p.status === ProjectStatus.IN_PROGRESS).length}</p>
-				<p><strong>Proyectos completados:</strong> ${myProjects.filter(p => p.status === ProjectStatus.COMPLETED).length}</p>
+				<p><strong>Proyectos en curso:</strong> ${completed.length}</p>
+				<p><strong>Proyectos completados:</strong> ${in_progress.length}</p>
 			</div>
 			<div class="card">
 				<h3 class="card-title">Acciones Rápidas</h3>
@@ -374,6 +375,8 @@ async function updateMyApplicationsContent() {
 
 	
 	projectsApliedTo.forEach(async project => {
+		if (project.status == "completed" && project.freelancerId != currentUser.id)
+			return
 		
 		const tmp = `<div class="project-card">
 				<h3 class="card-title">${project.title}</h3>
@@ -404,21 +407,53 @@ async function updateMyProjectsContent() {
 	projectsHTML.classList.add("project-grid")
 
 	myProjects.forEach(async project => {
+		console.log(project)
+		const status = project.status
 		const apps = await applicantApi.getApplicationsByProjectId(project.id)
-		const assignedFreelancer = project.assignedFreelancer
+		const assignedFreelancer = status != "open" ? await userApi.getUserById(project.assignedFreelancerId) : null
 
-		projectsHTML.innerHTML += `
-			<div class="project-card">
-				<h3 class="card-title">${project.title}</h3>
-				<p>${project.description.substring(0, 100)}...</p>
-				<p><strong>Estado:</strong> ${formatProjectStatus(project.status)}</p>
-				<p><strong>Presupuesto:</strong> $${project.budget}</p>
-				<p><strong>Postulantes:</strong> ${apps.length}</p>
-				${assignedFreelancer ? `<p><strong>Freelancer asignado:</strong> ${assignedFreelancer.name}</p>` : ''}
-				<button class="btn btn-outline mt-20" onclick="showProjectModal('${project.id}')">Editar</button>
-				<button class="btn btn-primary mt-20" onclick="viewProjectDetails('${project.id}')">Ver Detalles</button>
-			</div>
-		`;
+		switch (status) {
+			case "open":
+				projectsHTML.innerHTML += `
+					<div class="project-card">
+						<h3 class="card-title">${project.title}</h3>
+						<p>${project.description.substring(0, 100)}...</p>
+						<p>Este proyecto esta <strong>abierto</strong></p>
+						<p><strong>Presupuesto:</strong> $${project.budget}</p>
+						<p><strong>Postulantes:</strong> ${apps.length}</p>
+						<button class="btn btn-outline mt-20" onclick="showProjectModal('${project.id}')">Editar</button>
+						<button class="btn btn-primary mt-20" onclick="viewProjectDetails('${project.id}')">Ver Detalles</button>
+					</div>
+				`
+				break
+			case "in_progress":
+				projectsHTML.innerHTML += `
+					<div class="project-card">
+						<h3 class="card-title">${project.title}</h3>
+						<p>${project.description.substring(0, 100)}...</p>
+						<p>Proyecto <strong>en trabajo</strong></p>
+						<p><strong>Presupuesto:</strong> $${project.budget}</p>
+						<p><strong>Freelancer asignado:</strong> ${assignedFreelancer.name}</p>
+						<button class="btn btn-outline mt-20" onclick="showProjectModal('${project.id}')">Editar</button>
+						<button class="btn btn-primary mt-20" onclick="viewProjectDetails('${project.id}')">Ver Detalles</button>
+					</div>
+				`
+				break
+			case "completed":
+				projectsHTML.innerHTML += `
+					<div class="project-card">
+						<h3 class="card-title">${project.title}</h3>
+						<p>${project.description.substring(0, 100)}...</p>
+						<p><strong>Este proyecto esta</strong>terminado</p>
+						<p><strong>Presupuesto:</strong> $${project.budget}</p>
+						<p><strong>Postulantes:</strong> ${apps.length}</p>
+						<p><strong>Freelancer asignado:</strong> ${assignedFreelancer.name}</p>
+						<button class="btn btn-primary mt-20" onclick="viewProjectDetails('${project.id}')">Ver Detalles</button>
+					</div>
+				`
+				break
+		}
+
 	});
 	
 	myProjectsContent.appendChild(projectsHTML)
@@ -557,9 +592,10 @@ window.applyToProject = applyToProject
 async function viewProjectDetails(projectId) {
 	const project = await projectApi.getProjectById(projectId)
 	
+	const isOwner = currentUser.id === project.ownerId;
+	const assignedFreelancerId = project.assignedFreelancerId ? project.assignedFreelancerId : null;
 	const owner = await userApi.getUserById(project.ownerId)
-	const assignedFreelancer = project.assignedFreelancerId ? project.assignedFreelancerId : null;
-	
+
 	let modalContent = `
 		<h2>${project.title}</h2>
 		<p><strong>Descripción:</strong> ${project.description}</p>
@@ -569,46 +605,163 @@ async function viewProjectDetails(projectId) {
 		<p><strong>Publicado por:</strong> ${owner ? owner.name : 'Desconocido'}</p>
 		<p><strong>Fecha de publicación:</strong> ${new Date(project.creationDate).toLocaleDateString()}</p>
 	`;
-	
-	if (currentUser.id === project.ownerId) {
+
+	// Case 1 & 2 & 3: Project Owner (Client) View
+
+	if (isOwner) {
+        if (project.status == "completed") {
+			// CASE 1: Project is completed const assignedFreelancer = await userApi.getUserById(assignedFreelancerId);
+            const assignedFreelancer = await userApi.getUserById(assignedFreelancerId);
+
+            modalContent += `
+                <div class="card mt-20">
+					<h3>Proyecto Terminado</h3>
+                    <p>Freelancer Asignado: <b>${assignedFreelancer.name}</b></p>
+                </div>
+            `;
+		} else
+        if (!assignedFreelancerId) {
+            // CASE 2: Client owns project, NO freelancer assigned (show applicants)
+            const projectApplicants = await applicantApi.getApplicantsByProjectId(projectId);
+            
+            modalContent += `<h3>Postulantes (${projectApplicants.length})</h3>`;
+            
+            if (projectApplicants.length > 0) {
+                projectApplicants.forEach(freelancer => {
+                    modalContent += `
+                        <div class="card mt-20">
+                            <h4>${freelancer.name}</h4>
+                            <p><strong>Email:</strong> ${freelancer.email}</p>
+                            ${freelancer.rating ? `<p><strong>Rating:</strong> ${freelancer.rating}/5</p>` : ''}
+                            ${freelancer.occupation ? `<p><strong>Ocupación:</strong> ${freelancer.occupation}</p>` : ''}
+                            ${freelancer.cv ? `<p><strong>CV:</strong> ${freelancer.cv}</p>` : ''}
+                            ${project.status === ProjectStatus.OPEN ? 
+                                `<button class="btn btn-primary mt-20" onclick="selectFreelancer('${project.id}', '${freelancer.id}')">Seleccionar</button>` : 
+                                ''
+                            }
+                        </div>
+                    `;
+                });
+            } else {
+                modalContent += '<p>No hay postulantes para este proyecto.</p>';
+            }
+            
+        } else {
+            // CASE 3: Client owns project, YES freelancer assigned (show freelancer data and contact prompt)
+            const assignedFreelancer = await userApi.getUserById(assignedFreelancerId);
+            
+            modalContent += `
+                <div class="card mt-20">
+                    <h3>Freelancer Asignado: <b>${assignedFreelancer.name}</b></h3>
+                    <p><strong>Email:</strong> ${assignedFreelancer.email}</p>
+                    <p>Por favor, **póngase en contacto con el freelancer** para coordinar los detalles del proyecto.</p>
+                    ${project.status === ProjectStatus.IN_PROGRESS ? 
+                        `<button class="btn btn-primary mt-20" onclick="completeProject('${project.id}')">Marcar como Completado</button>` : 
+                        ''
+                    }
+                </div>
+            `;
+        }
+    }
+
+	// Case 4 & 5 & 6 & 7: Freelancer/Applicant View
+    else {
 		
-		const projectApplicants = await applicantApi.getApplicantsByProjectId(projectId)
-		// Client view - show applicants
-		modalContent += `<h3>Postulantes (${projectApplicants.length})</h3>`;
-		
-		if (projectApplicants.length > 0) {
-			projectApplicants.forEach(freelancer => {
-				
+        if (project.status == "completed") {
+
+            modalContent += `
+                <div class="card mt-20">
+					<h3>Proyecto Terminado</h3>
+                </div>
+            `;
+		} else
+        if (!assignedFreelancerId) {
+			const applied = await applicantApi.doesApplicationExist(projectId, currentUser.id)
+			if (!applied) {
+				// CASE 5: Freelancer NOT assigned, not applied user is NOT owner (hide applicants, show neutral message)
 				modalContent += `
 					<div class="card mt-20">
-						<h4>${freelancer.name}</h4>
-						<p><strong>Email:</strong> ${freelancer.email}</p>
-						${freelancer.rating ? `<p><strong>Rating:</strong> ${freelancer.rating}/5</p>` : ''}
-						${freelancer.occupation ? `<p><strong>Ocupación:</strong> ${freelancer.occupation}</p>` : ''}
-						${freelancer.cv ? `<p><strong>CV:</strong> ${freelancer.cv}</p>` : ''}
-						${project.status === ProjectStatus.OPEN ? 
-							`<button class="btn btn-primary mt-20" onclick="selectFreelancer('${project.id}', '${freelancer.id}')">Seleccionar</button>` : 
-							''
-						}
+						<p>El proyecto está abierto y a la espera de un freelancer.</p>
+						<p>El listado de postulantes es privado y visible solo para el dueño del proyecto.</p>
 					</div>
 				`;
-			});
-		} else {
-			modalContent += '<p>No hay postulantes para este proyecto.</p>';
-		}
-	} else if (assignedFreelancer && assignedFreelancer.id === currentUser.id) {
-		// Assigned freelancer view
-		modalContent += `
-			<div class="card mt-20">
-				<h3>Eres el freelancer asignado</h3>
-				<p>Ponte en contacto con el cliente para coordinar los detalles del proyecto.</p>
-				${project.status === ProjectStatus.IN_PROGRESS ? 
-					`<button class="btn btn-primary mt-20" onclick="completeProject('${project.id}')">Marcar como Completado</button>` : 
-					''
-				}
-			</div>
-		`;
-	}
+			} else {
+				// CASE 6: Freelancer NOT assigned, but user applied (hide applicants, show neutral message)
+				modalContent += `
+					<div class="card mt-20">
+						<h3>Estas postulado</h3>
+						<p>El proyecto sigue abierto y no se ha esojido a un freelancer. Si el cliente te escoje, te contactará.</p>
+						<p>El listado de postulantes es privado y visible solo para el dueño del proyecto.</p>
+					</div>
+				`;
+
+			}
+        } else {
+			
+            // CASE 7: Freelancer IS assigned, user is NOT owner
+            const assignedFreelancer = await userApi.getUserById(assignedFreelancerId);
+            const isAssignedFreelancer = currentUser.id === project.assignedFreelancerId;
+
+            modalContent += `<div class="card mt-20">`;
+            
+            if (isAssignedFreelancer) {
+                // CASE 4a: YOU are the assigned freelancer
+                modalContent += `
+                    <h3>¡Felicidades! Has sido seleccionado.</h3>
+                    <p>Por favor, **ponte en contacto con el cliente** (${owner.name}, email: ${owner.email}) para iniciar el proyecto.</p>
+                `;
+            } else {
+                // CASE 4b: Another freelancer was chosen
+                modalContent += `
+                    <h3>Freelancer Asignado</h3>
+                    <p>Otro freelancer (${assignedFreelancer.name}) ha sido elegido para este proyecto.</p>
+                `;
+            }
+
+            modalContent += `</div>`;
+        }
+    }
+	
+	// if (!assignedFreelancerId) {
+		
+	// 	const projectApplicants = await applicantApi.getApplicantsByProjectId(projectId)
+	// 	// Client view - show applicants
+	// 	modalContent += `<h3>Postulantes (${projectApplicants.length})</h3>`;
+		
+	// 	if (projectApplicants.length > 0) {
+	// 		projectApplicants.forEach(freelancer => {
+				
+	// 			modalContent += `
+	// 				<div class="card mt-20">
+	// 					<h4>${freelancer.name}</h4>
+	// 					<p><strong>Email:</strong> ${freelancer.email}</p>
+	// 					${freelancer.rating ? `<p><strong>Rating:</strong> ${freelancer.rating}/5</p>` : ''}
+	// 					${freelancer.occupation ? `<p><strong>Ocupación:</strong> ${freelancer.occupation}</p>` : ''}
+	// 					${freelancer.cv ? `<p><strong>CV:</strong> ${freelancer.cv}</p>` : ''}
+	// 					${project.status === ProjectStatus.OPEN ? 
+	// 						`<button class="btn btn-primary mt-20" onclick="selectFreelancer('${project.id}', '${freelancer.id}')">Seleccionar</button>` : 
+	// 						''
+	// 					}
+	// 				</div>
+	// 			`;
+	// 		});
+	// 	} else {
+	// 		modalContent += '<p>No hay postulantes para este proyecto.</p>';
+	// 	}
+	// } else {
+	// 	// Assigned freelancer view
+	// 	const freelancer = await userApi.getUserById(assignedFreelancer)
+	// 	modalContent += `
+	// 		<div class="card mt-20">
+	// 			<h3>Freelancer: ${freelancer.name}</h3>
+	// 			<p>Ponte en contacto con el cliente para coordinar los detalles del proyecto.</p>
+	// 			${project.status === ProjectStatus.IN_PROGRESS ? 
+	// 				`<button class="btn btn-primary mt-20" onclick="completeProject('${project.id}')">Marcar como Completado</button>` : 
+	// 				''
+	// 			}
+	// 		</div>
+	// 	`;
+	// }
 	
 	// Show modal with project details
 	projectModalTitle.textContent = 'Detalles del Proyecto';
@@ -628,12 +781,11 @@ window.closeModal = function (modalName) {
 
 async function selectFreelancer(projectId, freelancerId) {
 	// Update project
-	const project = await projectApi.getProjectById(projectId);
-	if (project) {
-		project.assignedFreelancerId = freelancerId;
-		project.status = ProjectStatus.IN_PROGRESS;
-		await projectApi.updateProject(projectId, project)
+	const newProjectData = {
+		"assignedFreelancerId": freelancerId,
+		"status": ProjectStatus.IN_PROGRESS
 	}
+	await projectApi.updateProject(projectId, newProjectData)
 	
 	// Update application status
 	await applicantApi.acceptApplicant(projectId, freelancerId)
@@ -645,17 +797,17 @@ async function selectFreelancer(projectId, freelancerId) {
 }
 window.selectFreelancer = selectFreelancer
 
-function completeProject(projectId) {
-	const projectIndex = projects.findIndex(p => p.id === projectId);
-	if (projectIndex !== -1) {
-		projects[projectIndex].status = ProjectStatus.COMPLETED;
-		localStorage.setItem('projects', JSON.stringify(projects));
-		
-		showAlert('Proyecto marcado como completado.', mainAlert, 'success');
-		projectModal.classList.add('hidden');
-		updateOverviewContent();
+async function completeProject(projectId) {
+	const newProject = {
+		"status": ProjectStatus.COMPLETED
 	}
+	
+	await projectApi.updateProject(projectId, newProject)
+	showAlert('Proyecto marcado como completado.', mainAlert, 'success');
+	projectModal.classList.add('hidden');
+	updateOverviewContent();
 }
+window.completeProject = completeProject
 
 function showAlert(message, element, type) {
 	element.textContent = message;

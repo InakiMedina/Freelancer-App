@@ -40,6 +40,10 @@ router.get("/freelancers/:id", (req, res) => {
     return res.json(service.getApplicantsByProjectId(req.params.id))
 })
 
+router.get("/status/:status/:freelancerId", (req, res) => {
+    return res.json(service.getApplicationsBySatusAndFreelancerId(req.params.status, req.params.freelancerId))
+})
+
 router.get("/:projectId/:freelancerId", (req, res) => {
     return res.json(service.getStatusOfApplication(req.params.projectId, req.params.freelancerId))
 })

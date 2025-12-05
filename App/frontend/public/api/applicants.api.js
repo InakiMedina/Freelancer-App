@@ -95,6 +95,21 @@ export async function getStatusOfApplication(projectId, freelancerId) {
         });
 }
 
+/**
+ * Fetches applications by status == pending and applicant id
+ * @param {string} freelancerId The ID of the freelancer.
+ * @returns {Promise<Array>} 
+ */
+export async function getPendingApplicationsApplicantId(freelancerId) {
+    return await fetch(`${API_BASE_URL}/status/pending/${freelancerId}`)
+        .then(async function(response) {
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            return await response.json();
+        });
+}
+
+
+
 // --- POST Request ---
 
 /**

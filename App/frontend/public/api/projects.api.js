@@ -39,6 +39,14 @@ export async function getOpenProjectsByFree(id) {
 	})
 }
 
+export async function getInProgressProjectsByFree(id) {
+
+	return await fetch('http://localhost:3000/api/project/?status=in_progres&freelancerId=' + id)
+	.then(async function(response) {
+		return await response.json();
+	})
+}
+
 export async function getDoneProjectsByFree(id) {
 
 	return await fetch('http://localhost:3000/api/project/?status=done&freelancerId=' + id)

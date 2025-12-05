@@ -80,6 +80,21 @@ export const getStatusOfApplication = (projectId, freelancerId) => {
 };
 
 /**
+ * Get status of an application by its status and freelancer id
+ * @param {string} status The ID of the project.
+ * @param {string} freelancerId The ID of the freelancer.
+ * @returns {string} the status of the app
+ */
+
+export const getApplicationsBySatusAndFreelancerId = (status, freelancerId) => {
+    const data = readFile();
+    return data.filter(app => ( app.freelancerId === freelancerId &&
+        app.status === status))
+};
+
+
+
+/**
  * Get applications submitted by a specific freelancer.
  * @param {string} freelancerId The ID of the freelancer.
  * @param {string} projectId The ID of the freelancer.
@@ -222,7 +237,7 @@ export const acceptApplicant = (projectId, freelancerId) => {
         'error': 'application not found'
     }
 
-    const data = readFile();
+    let data = readFile();
 
     data = data.map(app => {
         if ( app.projectId == projectId)
