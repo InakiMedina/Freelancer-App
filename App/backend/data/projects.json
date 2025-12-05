@@ -81,17 +81,8 @@
     "budget": 18000,
     "category": "mobile-development",
     "ownerId": "_bpw4vcdbt",
-    "status": "open",
-    "creationDate": "2025-12-05T08:38:41.720Z"
-  },
-  {
-    "id": "88d47053-2739-4c6e-a070-93e4862944f9",
-    "title": "Practica de Github",
-    "description": "investigar que es jenkins y hacer un reporte de una pagina",
-    "budget": 50,
-    "category": "writing",
-    "ownerId": "_y9ogn5t6w",
-    "status": "open",
-    "creationDate": "2025-12-05T09:08:46.147Z"
+    "status": "completed",
+    "creationDate": "2025-12-05T08:38:41.720Z",
+    "assignedFreelancerId": "_j92psyqo7"
   }
 ]

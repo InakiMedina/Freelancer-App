@@ -83,5 +83,35 @@
     "currentWork": "",
     "cv": "",
     "currentProjects": []
+  },
+  {
+    "id": "3def3797-3ee1-43f9-86a6-006506e3daac",
+    "name": "zarate",
+    "email": "zarate@gmail.com",
+    "hashedPassword": "$2b$10$dZd21Q9IdQ4sGep6sa5f0uVm33zxnCxsnvYwXU3KQExbtfkUZdQ3e",
+    "rating": 0,
+    "raitingCount": 0,
+    "type": "client",
+    "registrationDate": "2025-12-05T14:34:36.686Z",
+    "educationLevel": "",
+    "occupation": "",
+    "currentWork": "",
+    "cv": "",
+    "currentProjects": []
+  },
+  {
+    "id": "f127e01e-4669-4e66-be93-ac723d66fd9d",
+    "name": "zarate",
+    "email": "zarate@gmail.com",
+    "hashedPassword": "$2b$10$nEHQYc34mBfMaKC94bO42.lfyrW4uW9M1ntjtXba1VLW7lQq3f2yK",
+    "rating": 0,
+    "raitingCount": 0,
+    "type": "freelancer",
+    "registrationDate": "2025-12-05T14:40:55.215Z",
+    "educationLevel": "",
+    "occupation": "",
+    "currentWork": "",
+    "cv": "",
+    "currentProjects": []
   }
 ]

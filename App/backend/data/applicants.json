@@ -48,5 +48,25 @@
     "projectId": "ff50c4c1-4daa-4177-98e1-c043d569097d",
     "freelancerId": "_ig11hcoez",
     "status": "declined"
+  },
+  {
+    "projectId": "88d47053-2739-4c6e-a070-93e4862944f9",
+    "freelancerId": "d5720388-cef0-4b83-a7e3-6b29bcdc4162",
+    "status": "pending"
+  },
+  {
+    "projectId": "99dc95eb-6716-4406-b18e-7602b532de0e",
+    "freelancerId": "_j92psyqo7",
+    "status": "accepted"
+  },
+  {
+    "projectId": "d8133de2-4fd7-4655-9185-c36fa22ba192",
+    "freelancerId": "_j92psyqo7",
+    "status": "pending"
+  },
+  {
+    "projectId": "55e952bf-9bb9-4ac8-849e-175b2a07e9d6",
+    "freelancerId": "_j92psyqo7",
+    "status": "pending"
   }
 ]
