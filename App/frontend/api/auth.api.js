@@ -28,3 +28,12 @@ export async function signup(user) {
 	res.ok
   })
 }
+
+export async function logout() {
+  return await fetch(`http://localhost:3000/logout`, {
+	method: "POST",
+  })
+  .then(async res => {
+	return res
+  })
+}

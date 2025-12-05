@@ -111,3 +111,16 @@ export const signup = async (req, res) => {
 		maxAge: tokenExpirationSeconds * 1000
 	})
 }
+
+export const logout = async (req, res) => {
+	// 1. Clear the cookie by setting its expiration date to a time in the past
+    res.cookie('access_token', '', { 
+        expires: new Date(0), // Sets expiration to Unix Epoch (Jan 1, 1970)
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production', // Use secure in production
+        path: '/', // Ensure the path matches the original cookie path
+    });
+
+    // 2. Respond to the client
+    res.status(200).json({ message: 'Logged out successfully' });
+}

@@ -24,6 +24,7 @@ router.use('/api', apiRouter)
 
 router.post('/login', authRouter.login)
 router.post('/signup', authRouter.signup)
+router.post('/logout', authRouter.logout)
 
 const viewsPath = path.resolve(__dirname, "..", "frontend", "views")
 router.get('/', tokenVerify, (req, res) => res.sendFile(path.resolve(viewsPath, "home.html")))

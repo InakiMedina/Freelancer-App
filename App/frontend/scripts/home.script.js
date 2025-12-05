@@ -145,10 +145,18 @@ function showDashboard() {
 	showDashboardSection('overview');
 }
 
-function logout() {
+async function logout() {
 	currentUser = null;
 	localStorage.removeItem('currentUser');
-	showLandingPage();
+
+	const response = await authApi.logout()
+
+	if (response.ok) {
+		// Once the backend confirms the cookie is cleared:
+		window.location.href = '/auth'; 
+	} else {
+		console.error('Logout failed on the server.');
+	}
 }
 
 // Dashboard Functions

@@ -1,6 +1,16 @@
 [
   {
-    "id": "_kuskoisuwy",
+    "id": "6b9da6ad-3463-49b7-9d40-fe05fb166fa9",
+    "title": "Proyecto Final Web",
+    "description": "ayudenme haciendo un proyecto de web para mi clase. JS, Node, Express y Mongo con opcional boostrap.",
+    "budget": 6000,
+    "category": "web-development",
+    "ownerId": "_bpw4vcdbt",
+    "status": "open",
+    "creationDate": "2025-11-29T21:27:26.114Z"
+  },
+  {
+    "id": "1a5368dc-e5e9-4671-bb89-42d89422a83f",
     "title": "App para contadores",
     "description": "necesito un app de Shiphone que me ayude a mantener cuenta de pagos que hago",
     "budget": 18000,
@@ -10,7 +20,7 @@
     "creationDate": "2025-11-29T22:37:26.114Z"
   },
   {
-    "id": "_61en2nr6a",
+    "id": "08e25129-1380-4ac4-91a5-3258cf4b2e87",
     "title": "Reporte de Inovacion",
     "description": "reporte de 3 paginas de una inovacion con entrevistas, evolucion, demos, y market research",
     "budget": 5000,
@@ -20,24 +30,23 @@
     "creationDate": "2025-11-29T22:39:33.199Z"
   },
   {
-    "id": "74a94461-3d8a-4cf9-a9d7-ff58f369e0e7",
+    "id": "fbc841eb-364d-4448-90b6-d5ddc3559576",
     "title": "Practica de Github",
     "description": "investigar que es jenkins y hacer un reporte de una pagina",
-    "budget": 49,
+    "budget": 50,
     "category": "writing",
     "ownerId": "_y9ogn5t6w",
-    "status": "in_progress",
-    "creationDate": "2025-12-03T20:56:32.050Z",
-    "assignedFreelancerId": "_ig11hcoez"
+    "status": "open",
+    "creationDate": "2025-12-02T12:39:33.199Z"
   },
   {
-    "id": "6bf16257-cd8e-4a93-a60c-3ccdffa2c017",
-    "title": "Proyecto Final Web",
-    "description": "ayudenme haciendo un proyecto de web para mi clase. JS, Node, Express y Mongo con opcional boostrap.",
-    "budget": 6000,
-    "category": "web-development",
-    "ownerId": "_bpw4vcdbt",
+    "id": "ff50c4c1-4daa-4177-98e1-c043d569097d",
+    "title": "Snake Game",
+    "description": "un snake en el celular",
+    "budget": 500,
+    "category": "mobile-developmen",
+    "ownerId": "_y9ogn5t6w",
     "status": "open",
-    "creationDate": "2025-12-03T21:13:57.398Z"
+    "creationDate": "2025-12-01T22:39:33.199Z"
   }
 ]
