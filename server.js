@@ -4,7 +4,7 @@ const app = express()
 import path from 'path'
 import cookieParse from "cookie-parser"
 
-const port = 3000
+const port = 80
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 
@@ -15,7 +15,7 @@ import router from './App/backend/router.js'
 
 // make easy for the html files to call the css/js/images
 app.use(cors({
-  origin: `http://localhost:${port}`, 
+  origin: `https://freelancer-app-c2hl.onrender.com:${port}`, 
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true,
 }));
@@ -26,5 +26,5 @@ app.use(express.static(path.join(__dirname, "app", "frontend", "public")));
 app.use(router)
 
 app.listen(port, () => {
-  console.log(`Freelancer app runing on: http://localhost:${port}`)
+  console.log(`Freelancer app runing on: https://freelancer-app-c2hl.onrender.com:${port}`)
 })
