@@ -4,7 +4,8 @@ const app = express()
 import path from 'path'
 import cookieParse from "cookie-parser"
 
-const port = 80
+const port = process.env.PORT || 80
+const host = process.env.HOST || 'localhost'
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 
@@ -15,7 +16,7 @@ import router from './App/backend/router.js'
 
 // make easy for the html files to call the css/js/images
 app.use(cors({
-  origin: `https://freelancer-app-c2hl.onrender.com:${port}`, 
+  origin: `https://${host}:${port}`, 
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true,
 }));
