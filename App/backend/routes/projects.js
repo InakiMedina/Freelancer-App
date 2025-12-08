@@ -1,6 +1,7 @@
 // routes/projects.js
 import express from "express";
 import * as service from "../services/projects.service.js";
+import * as appService from '../services/applicants.service.js'
 
 const router = express.Router();
 
@@ -46,7 +47,9 @@ router.delete("/", (req, res) => {
 });
 
 router.delete("/:id", (req, res) => {
+  appService.deleteApplicationsByProjectId(req.params.id)
   service.deleteProject(req.params.id);
+
   res.status(204).send();
 });
 

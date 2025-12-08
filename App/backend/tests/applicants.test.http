@@ -2,7 +2,7 @@
 GET http://localhost:3000/api/applicants
 
 ###
-GET http://localhost:3000/api/applicants?projectId=_c5w7cuzec
+GET http://localhost:3000/api/applicants?projectId=88d47053-2739-4c6e-a070-93e4862944f9
 
 ###
 GET http://localhost:3000/api/applicants?freelancerId=_ig11hcoez
@@ -20,7 +20,7 @@ GET http://localhost:3000/api/applicants/freelancers/_c5w7cuzec
 DELETE http://localhost:3000/api/applicants
 
 ###
-DELETE http://localhost:3000/api/applicants/project/c5w7cuzec
+DELETE http://localhost:3000/api/applicants/project/88d47053-2739-4c6e-a070-93e4862944f9
 
 ###
 DELETE http://localhost:3000/api/applicants/freelancer/j92psyqo7

@@ -1,4 +1,4 @@
-import * as authApi from '../../api/auth.api.js'
+import * as authApi from '../api/auth.api.js'
 
 // Current User
 let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
@@ -25,9 +25,12 @@ const UserTypes = {
 };
 
 function setupEventListeners() {
+	console.log("here")
 	// Auth
 	authForm.addEventListener('submit', handleAuth);
-	authSwitchLink.addEventListener('click', toggleAuthMode);
+	authSwitchLink.addEventListener('click', toggleAuthMode)
+	navLogin.addEventListener('click', () => setAuthMode('login'))
+	navRegister.addEventListener('click', () => setAuthMode('register'))
 }
 
 
@@ -39,7 +42,6 @@ function showAlert(message, element, type) {
 	
 	// Auto-hide after 5 seconds
 	setTimeout(() => {
-		console.log(element)
 		hideAlert(element);
 	}, 5000);
 }
@@ -53,25 +55,24 @@ function setAuthMode(mode) {
 	if (mode === 'login') {
 		authTitle.textContent = 'Iniciar Sesión';
 		authSubmitBtn.textContent = 'Iniciar Sesión';
-		authSwitchText.innerHTML = '¿No tienes una cuenta? <a href="#" id="auth-switch-link">Regístrate</a>';
+		authSwitchText.innerHTML = '¿No tienes una cuenta? <a href="" id="auth-switch-link">Regístrate</a>';
 		nameGroup.style.display = 'none';
 		userTypeGroup.style.display = 'none';
 		cvGroup.style.display = 'none';
 	} else {
 		authTitle.textContent = 'Registrarse';
 		authSubmitBtn.textContent = 'Registrarse';
-		authSwitchText.innerHTML = '¿Ya tienes una cuenta? <a href="#" id="auth-switch-link">Inicia Sesión</a>';
+		authSwitchText.innerHTML = '¿Ya tienes una cuenta? <a href="" id="auth-switch-link">Inicia Sesión</a>';
 		nameGroup.style.display = 'block';
 		userTypeGroup.style.display = 'block';
-		
-		// Re-attach event listener after updating the DOM
-		document.getElementById('auth-switch-link').addEventListener('click', toggleAuthMode);
 		
 		// Show CV field only for freelancers
 		document.getElementById('user-type').addEventListener('change', (e) => {
 			cvGroup.style.display = e.target.value === UserTypes.FREELANCER ? 'block' : 'none';
 		});
 	}
+		// Re-attach event listener after updating the DOM
+		document.getElementById('auth-switch-link').addEventListener('click', toggleAuthMode);
 	
 	// Clear form and alert
 	authForm.reset();
@@ -93,7 +94,6 @@ async function handleAuth(e) {
 	if (authTitle.textContent === 'Iniciar Sesión') {
 		// Login
 		const user = await authApi.login(email, password)
-		console.log(user)
 		
 		if (user) {
 			currentUser = user;
@@ -124,18 +124,17 @@ async function handleAuth(e) {
 			cv: cvFile ? cvFile.name : '',
 			projects: []
 		};
-	
-		currentUser = newUser;
-		console.log("here0")
+
 		const signupRes = await authApi.signup(newUser)
-		if (!signupRes) {
+		console.log(signupRes)
+		if (!signupRes.ok) {
 			e.stopImmediatePropagation()
-			showAlert("Failed to authenticate", authAlert, 'danger');
+			showAlert(signupRes.body, authAlert, 'danger');
 			return
 		}
-		localStorage.setItem('currentUser', JSON.stringify(currentUser));
+		localStorage.setItem('currentUser', JSON.stringify(signupRes.body));
+		window.location.replace('/')
 	}
 }
-
 
 setupEventListeners();

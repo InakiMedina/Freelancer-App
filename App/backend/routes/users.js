@@ -1,6 +1,9 @@
   // routes/users.js
 import express from "express";
-  import * as service from "../services/users.service.js";
+
+import * as service from "../services/users.service.js";
+import * as appService from '../services/applicants.service.js'
+import * as projectService from '../services/projects.service.js'
 
   const router = express.Router();
 
@@ -43,6 +46,17 @@ import express from "express";
 
   router.delete("/:id", (req, res) => {
     service.deleteUser(req.params.id);
+    appService.deleteApplicationsByFreelancerId(req.params.id)
+    projectService.deleteAllProyectsByOwnerId(req.params.id)
+
+    res.status(204).send();
+  });
+
+  router.delete("/", (req, res) => {
+    service.deleteAllUsers();
+    appService.deleteAllApplications()
+    projectService.deleteAllProjects()
+
     res.status(204).send();
   });
 

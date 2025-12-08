@@ -1,88 +1,53 @@
 [
   {
-    "id": "6b9da6ad-3463-49b7-9d40-fe05fb166fa9",
+    "id": "4fd7a678-bbb7-44be-ae38-afb62479a3d3",
     "title": "Proyecto Final Web",
     "description": "ayudenme haciendo un proyecto de web para mi clase. JS, Node, Express y Mongo con opcional boostrap.",
     "budget": 6000,
     "category": "web-development",
-    "ownerId": "_bpw4vcdbt",
-    "status": "completed",
-    "creationDate": "2025-11-29T21:27:26.114Z",
-    "assignedFreelancerId": "_j92psyqo7"
+    "ownerId": "1f1052ff-4d24-4c3b-93d9-bd1b9820dfcd6",
+    "status": "open",
+    "creationDate": "2025-11-29T21:27:26.114Z"
   },
   {
-    "id": "1a5368dc-e5e9-4671-bb89-42d89422a83f",
+    "id": "77614969-0c02-4810-a8ff-42c0dbf7ce4c",
     "title": "App para contadores",
     "description": "necesito un app de Shiphone que me ayude a mantener cuenta de pagos que hago",
     "budget": 18000,
     "category": "mobile-development",
-    "ownerId": "_bpw4vcdbt",
-    "status": "completed",
-    "creationDate": "2025-11-29T22:37:26.114Z",
-    "assignedFreelancerId": "_ig11hcoez"
+    "ownerId": "1f1052ff-4d24-4c3b-93d9-bd1b9820dfcd",
+    "status": "open",
+    "creationDate": "2025-11-29T22:37:26.114Z"
   },
   {
-    "id": "08e25129-1380-4ac4-91a5-3258cf4b2e87",
+    "id": "bc5785dc-3b18-444f-bfeb-1111d444d873",
     "title": "Reporte de Inovacion",
     "description": "reporte de 3 paginas de una inovacion con entrevistas, evolucion, demos, y market research",
     "budget": 5000,
     "category": "writing",
-    "ownerId": "_bpw4vcdbt",
-    "status": "in_progress",
-    "creationDate": "2025-11-29T22:39:33.199Z",
-    "assignedFreelancerId": "d5720388-cef0-4b83-a7e3-6b29bcdc4162"
+    "ownerId": "1f1052ff-4d24-4c3b-93d9-bd1b9820dfcd",
+    "status": "open",
+    "creationDate": "2025-11-29T22:39:33.199Z"
   },
   {
-    "id": "fbc841eb-364d-4448-90b6-d5ddc3559576",
+    "id": "9d0f2f41-6c26-4d4e-82d7-08059ce27544",
     "title": "Practica de Github",
     "description": "investigar que es jenkins y hacer un reporte de una pagina",
     "budget": 50,
     "category": "writing",
-    "ownerId": "_y9ogn5t6w",
+    "ownerId": "221b0439-1c2d-4da1-a5ba-9716dbb624fd",
     "status": "completed",
     "creationDate": "2025-12-02T12:39:33.199Z",
-    "assignedFreelancerId": "_ig11hcoez"
+    "assignedFreelancerId": "98759f8e-872e-498b-853f-449c80522938"
   },
   {
-    "id": "ff50c4c1-4daa-4177-98e1-c043d569097d",
+    "id": "dc4bfa08-3ef2-4a78-906e-0d8b21775984",
     "title": "Snake Game",
     "description": "un snake en el celular",
     "budget": 500,
     "category": "mobile-developmen",
-    "ownerId": "_y9ogn5t6w",
-    "status": "completed",
-    "creationDate": "2025-12-01T22:39:33.199Z",
-    "assignedFreelancerId": "d5720388-cef0-4b83-a7e3-6b29bcdc4162"
-  },
-  {
-    "id": "55e952bf-9bb9-4ac8-849e-175b2a07e9d6",
-    "title": "App para contadores",
-    "description": "necesito un app de Shiphone que me ayude a mantener cuenta de pagos que hago",
-    "budget": 18000,
-    "category": "mobile-development",
-    "ownerId": "_bpw4vcdbt",
+    "ownerId": "221b0439-1c2d-4da1-a5ba-9716dbb624fd",
     "status": "open",
-    "creationDate": "2025-12-05T07:28:11.680Z"
-  },
-  {
-    "id": "d8133de2-4fd7-4655-9185-c36fa22ba192",
-    "title": "App para contadores",
-    "description": "necesito un app de Shiphone que me ayude a mantener cuenta de pagos que hago",
-    "budget": 18000,
-    "category": "mobile-development",
-    "ownerId": "_bpw4vcdbt",
-    "status": "open",
-    "creationDate": "2025-12-05T08:31:16.531Z"
-  },
-  {
-    "id": "99dc95eb-6716-4406-b18e-7602b532de0e",
-    "title": "App para contadores",
-    "description": "necesito un app de Shiphone que me ayude a mantener cuenta de pagos que hago",
-    "budget": 18000,
-    "category": "mobile-development",
-    "ownerId": "_bpw4vcdbt",
-    "status": "completed",
-    "creationDate": "2025-12-05T08:38:41.720Z",
-    "assignedFreelancerId": "_j92psyqo7"
+    "creationDate": "2025-12-01T22:39:33.199Z"
   }
 ]

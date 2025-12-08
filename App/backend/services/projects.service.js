@@ -82,6 +82,11 @@ export const deleteProject = (id) => {
   const filtered = data.filter(p => p.id !== id);
   writeFile(filtered);
 }
+export const deleteAllProyectsByOwnerId = (id) => {
+  const data = readFile();
+  const filtered = data.filter(p => p.ownerId !== id);
+  writeFile(filtered);
+};
 
 export const deleteAllProjects = (id) => {
   writeFile([]);

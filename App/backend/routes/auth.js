@@ -80,17 +80,27 @@ export const login = async (req, res) => {
 export const signup = async (req, res) => {
 	let data = req.body
 
-
     var privateKey = fs.readFileSync(secretsPath, "utf8");
 	data.hashedPassword = await bcrypt.hash(data.password, saltRounds)
 	delete data["password"]
+
+	//check if data matches existing user
+	const emailMatch = await usersService.getUserByEmail(data.email)
+	if (emailMatch) {
+		return res.status(409).json("You already have an account with this email")
+	}
+
+	const nameMatch = await usersService.getUserByName(data.name)
+	if (nameMatch) {
+		return res.status(409).json("This username has already been taken")
+	}
 
 	console.log(data)
 	const response = usersService.createUser(data)
 	console.log(response)
 
 	if (response.success >= 400)
-		return response
+		return res.status(response.success).send(response)
 
 	const body = {"email": data.email, "name": data.name}
 	
@@ -110,6 +120,8 @@ export const signup = async (req, res) => {
 		sameSite: "lax",
 		maxAge: tokenExpirationSeconds * 1000
 	})
+
+	res.status(200).json(response.body);
 }
 
 export const logout = async (req, res) => {
@@ -122,5 +134,5 @@ export const logout = async (req, res) => {
     });
 
     // 2. Respond to the client
-    res.status(200).json({ message: 'Logged out successfully' });
+    res.status(200).json({ message: 'Logged in successfully' });
 }

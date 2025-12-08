@@ -8,8 +8,6 @@ export async function login(email, password) {
 	})
 	.then(async res =>{
 		const json = await res.json()
-		console.log(json)
-		console.log(json.hasOwnProperty("error"))
 		if (json.hasOwnProperty("error"))
 			return undefined
 		else 
@@ -25,7 +23,8 @@ export async function signup(user) {
 	body: JSON.stringify(user)
   })
   .then(async res => {
-	res.ok
+	console.log(res)
+	return {"ok": res.ok,"body": await res.json()}
   })
 }
 
@@ -33,7 +32,7 @@ export async function logout() {
   return await fetch(`http://localhost:3000/logout`, {
 	method: "POST",
   })
-  .then(async res => {
-	return res
-  })
+  .then(async res =>
+	res
+  )
 }

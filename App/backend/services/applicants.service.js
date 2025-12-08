@@ -31,11 +31,11 @@ const readFile = () => {
 }
 const writeFile = (data) => fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
 
-// const readProjectsFile = () => JSON.parse(fs.readFileSync(projectFilePath, "utf8"));
-//const writeProjectsFile = (data) => fs.writeFileSync(projectFilePath, JSON.stringify(data, null, 2))
+const readProjectsFile = () => JSON.parse(fs.readFileSync(projectFilePath, "utf8"));
+const writeProjectsFile = (data) => fs.writeFileSync(projectFilePath, JSON.stringify(data, null, 2))
 
-// const readUsersFile = () => JSON.parse(fs.readFileSync(usersFilePath, "utf8"));
-//const writeUsersFile = (data) => fs.writeFileSync(usersFilePath, JSON.stringify(data, null, 2))
+const readUsersFile = () => JSON.parse(fs.readFileSync(usersFilePath, "utf8"));
+const writeUsersFile = (data) => fs.writeFileSync(usersFilePath, JSON.stringify(data, null, 2))
 
 /**
  * Get all applicants.
@@ -119,7 +119,13 @@ export const doesApplicationExisist = (projectId, freelancerId) => {
 export const getProjectsByApplicantId = (aplicantId) => {
     const data = readFile();
     const appsAndProjects = data.filter(applicant => applicant.freelancerId === aplicantId);
-    const projects = appsAndProjects.map(app => projectService.getProjectById(app.projectId))
+    const projects = appsAndProjects.map(app => {
+        const project = projectService.getProjectById(app.projectId)
+        if (project == null)
+            console.log("project of id: " + app.projectId + " dosent exist anymore anymore")
+        
+        return project
+    })
     return projects
 }
 
@@ -131,7 +137,12 @@ export const getProjectsByApplicantId = (aplicantId) => {
 export const getApplicantsByProjectId = (projectId) => {
     const data = readFile();
     const appsAndProjects = data.filter(applicant => applicant.projectId === projectId);
-    const applicants = appsAndProjects.map(app => usersService.getUserById(app.freelancerId))
+    const applicants = appsAndProjects.map(app => {
+        const user = usersService.getUserById(app.freelancerId)
+        if (!user)
+            console.log("freelancer of id: " + app.freelancerId + "dosent exist anymore anymore")
+        return user
+    } )
     return applicants
 }
 
@@ -223,6 +234,7 @@ export const deleteAllApplications = () => {
     writeFile([]);
 };
 
+
 /**
  * Updates the status a specific application by project ID and freelancer ID
  * @param {string} freelancerId The ID of the freelancer.
@@ -230,7 +242,6 @@ export const deleteAllApplications = () => {
  */
 export const acceptApplicant = (projectId, freelancerId) => {
     let applicants = getApplicationsByProjectId(projectId)
-    console.log(applicants)
     if (applicants.findIndex( app => app.freelancerId == freelancerId) == -1)
         return {
         'success': 404,
@@ -244,7 +255,6 @@ export const acceptApplicant = (projectId, freelancerId) => {
             app.status = app.freelancerId == freelancerId ? "accepted" : "declined"
         return app
     })
-    console.log(data)
 
     writeFile(data);
 

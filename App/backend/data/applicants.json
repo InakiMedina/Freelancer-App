@@ -1,72 +1,37 @@
 [
   {
-    "projectId": "6b9da6ad-3463-49b7-9d40-fe05fb166fa9",
-    "freelancerId": "_j92psyqo7",
+    "projectId": "4fd7a678-bbb7-44be-ae38-afb62479a3d3",
+    "freelancerId": "98759f8e-872e-498b-853f-449c80522938",
     "status": "pending"
   },
   {
-    "projectId": "1a5368dc-e5e9-4671-bb89-42d89422a83f",
-    "freelancerId": "_j92psyqo7",
+    "projectId": "9d0f2f41-6c26-4d4e-82d7-08059ce27544",
+    "freelancerId": "98759f8e-872e-498b-853f-449c80522938",
+    "status": "accepted"
+  },
+  {
+    "projectId": "dc4bfa08-3ef2-4a78-906e-0d8b21775984",
+    "freelancerId": "98759f8e-872e-498b-853f-449c80522938",
     "status": "pending"
   },
   {
-    "projectId": "08e25129-1380-4ac4-91a5-3258cf4b2e87",
-    "freelancerId": "_j92psyqo7",
+    "projectId": "bc5785dc-3b18-444f-bfeb-1111d444d873",
+    "freelancerId": "e78b740d-41fb-4f0d-ae0e-bd2dc4d60a83",
+    "status": "pending"
+  },
+  {
+    "projectId": "dc4bfa08-3ef2-4a78-906e-0d8b21775984",
+    "freelancerId": "e78b740d-41fb-4f0d-ae0e-bd2dc4d60a83",
+    "status": "pending"
+  },
+  {
+    "projectId": "9d0f2f41-6c26-4d4e-82d7-08059ce27544",
+    "freelancerId": "e78b740d-41fb-4f0d-ae0e-bd2dc4d60a83",
     "status": "declined"
   },
   {
-    "projectId": "fbc841eb-364d-4448-90b6-d5ddc3559576",
-    "freelancerId": "d5720388-cef0-4b83-a7e3-6b29bcdc4162",
-    "status": "pending"
-  },
-  {
-    "projectId": "ff50c4c1-4daa-4177-98e1-c043d569097d",
-    "freelancerId": "d5720388-cef0-4b83-a7e3-6b29bcdc4162",
-    "status": "accepted"
-  },
-  {
-    "projectId": "08e25129-1380-4ac4-91a5-3258cf4b2e87",
-    "freelancerId": "d5720388-cef0-4b83-a7e3-6b29bcdc4162",
-    "status": "accepted"
-  },
-  {
-    "projectId": "6b9da6ad-3463-49b7-9d40-fe05fb166fa9",
-    "freelancerId": "_ig11hcoez",
-    "status": "pending"
-  },
-  {
-    "projectId": "1a5368dc-e5e9-4671-bb89-42d89422a83f",
-    "freelancerId": "_ig11hcoez",
-    "status": "pending"
-  },
-  {
-    "projectId": "fbc841eb-364d-4448-90b6-d5ddc3559576",
-    "freelancerId": "_ig11hcoez",
-    "status": "pending"
-  },
-  {
-    "projectId": "ff50c4c1-4daa-4177-98e1-c043d569097d",
-    "freelancerId": "_ig11hcoez",
-    "status": "declined"
-  },
-  {
-    "projectId": "88d47053-2739-4c6e-a070-93e4862944f9",
-    "freelancerId": "d5720388-cef0-4b83-a7e3-6b29bcdc4162",
-    "status": "pending"
-  },
-  {
-    "projectId": "99dc95eb-6716-4406-b18e-7602b532de0e",
-    "freelancerId": "_j92psyqo7",
-    "status": "accepted"
-  },
-  {
-    "projectId": "d8133de2-4fd7-4655-9185-c36fa22ba192",
-    "freelancerId": "_j92psyqo7",
-    "status": "pending"
-  },
-  {
-    "projectId": "55e952bf-9bb9-4ac8-849e-175b2a07e9d6",
-    "freelancerId": "_j92psyqo7",
+    "projectId": "77614969-0c02-4810-a8ff-42c0dbf7ce4c",
+    "freelancerId": "e78b740d-41fb-4f0d-ae0e-bd2dc4d60a83",
     "status": "pending"
   }
 ]

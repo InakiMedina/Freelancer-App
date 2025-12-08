@@ -18,7 +18,7 @@ content-type: application/json
 	"description": "ayudenme haciendo un proyecto de web para mi clase. JS, Node, Express y Mongo con opcional boostrap.", 
 	"budget": 6000, 
 	"category": "web-development", 
-	"ownerId": "_bpw4vcdbt", 
+	"ownerId": "1f1052ff-4d24-4c3b-93d9-bd1b9820dfcd6", 
 	"status": "open", 
 	"creationDate": "2025-11-29T21:27:26.114Z"
 }
@@ -32,7 +32,7 @@ content-type: application/json
 	"description": "necesito un app de Shiphone que me ayude a mantener cuenta de pagos que hago", 
 	"budget": 18000, 
 	"category": "mobile-development", 
-	"ownerId": "_bpw4vcdbt", 
+	"ownerId": "1f1052ff-4d24-4c3b-93d9-bd1b9820dfcd", 
 	"status": "open", 
 	"creationDate": "2025-11-29T22:37:26.114Z"
 }
@@ -47,7 +47,7 @@ content-type: application/json
 	"description":"reporte de 3 paginas de una inovacion con entrevistas, evolucion, demos, y market research",
 	"budget":5000,
 	"category":"writing",
-	"ownerId":"_bpw4vcdbt",
+	"ownerId":"1f1052ff-4d24-4c3b-93d9-bd1b9820dfcd",
 	"status":"open",
 	"creationDate":"2025-11-29T22:39:33.199Z"
 }	
@@ -61,7 +61,7 @@ content-type: application/json
 	"description":"investigar que es jenkins y hacer un reporte de una pagina",
 	"budget":50,
 	"category":"writing",
-	"ownerId":"_y9ogn5t6w",
+	"ownerId":"221b0439-1c2d-4da1-a5ba-9716dbb624fd",
 	"status":"open",
 	"creationDate":"2025-12-02T12:39:33.199Z"
 }	
@@ -76,10 +76,10 @@ content-type: application/json
 	"description":"un snake en el celular",
 	"budget":500,
 	"category":"mobile-developmen",
-	"ownerId":"_y9ogn5t6w",
+	"ownerId":"221b0439-1c2d-4da1-a5ba-9716dbb624fd",
 	"status":"open",
 	"creationDate":"2025-12-01T22:39:33.199Z"
 }	
 
 ###
-DELETE http://localhost:3000/api/project/
+DELETE http://localhost:3000/api/project

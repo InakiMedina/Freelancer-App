@@ -26,6 +26,12 @@ export const getUserByEmail = (email) => {
   return data.find(u => u.email === email);
 };
 
+export const getUserByName = (name) => {
+  const data = readFile();
+  return data.find(u => u.name === name);
+
+}
+
 export const createUser = (userData) => {
   userData["id"] = authUtils.generateId()
   
@@ -44,7 +50,8 @@ export const createUser = (userData) => {
   writeFile(data);
 
   return {
-    success: 201
+    success: 201,
+    body: result.data
   };
 };
 
@@ -64,4 +71,8 @@ export const deleteUser = (id) => {
   const data = readFile();
   const filtered = data.filter(u => u.id !== id);
   writeFile(filtered);
+};
+
+export const deleteAllUsers = () => {
+  writeFile([]);
 };
